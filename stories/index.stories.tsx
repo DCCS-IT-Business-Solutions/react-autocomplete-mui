@@ -4,71 +4,114 @@ import { storiesOf } from "@storybook/react";
 
 import urljoin from "url-join";
 import { Autocomplete, HighlightQuery } from "../src/Autocomplete";
-import { FormikAutocompleteField } from "../src/FormikAutocomplete";
-import { Typography, Paper, Divider, Button } from "@material-ui/core";
-import { Formik, FormikProps } from "formik";
+import { Paper, Divider, Typography } from "@material-ui/core";
+import { countries, keyValueList } from "./data";
 
-function apiUrl(relative: string) {
-  return urljoin("http://localhost:5000/", relative);
-}
-
-function getJSON(url: string) {
-  return fetch(url, { credentials: "include" }).then(r => r.json());
-}
-
-const path = "/countries";
 const api = {
-  query: (q: string) => getJSON(apiUrl(`${path}?q=${q}`)),
-  queryName: (q: string) => getJSON(apiUrl(`${path}?name_like=${q}`)),
-  queryRegion: (q: string) => getJSON(apiUrl(`${path}?region_like=${q}`))
+  queryCountries: (query: string) =>
+    countries.filter(c => c.name.includes(query) || c.region.includes(query)),
+  queryKeyValue: (query: string) =>
+    new Promise<any[]>((res, rej) =>
+      setTimeout(
+        () => res(keyValueList.filter(c => c.value.includes(query))),
+        1000
+      )
+    )
 };
 
-function DummyAutocomplete() {
+function CountryAutocomplete() {
   const [value, setValue] = React.useState();
 
   return (
     <Autocomplete
       label="Länder"
       value={value}
-      textProp={(object: any) => object.name}
       onOptionSelected={(object: any) => setValue(object)}
-      onLoadOptions={(q: string) => api.query(q)}
-      renderOption={(object: any, query: string) => (
+      onLoadOptions={(q: string) => api.queryCountries(q)}
+      textProp={option => option.name}
+    />
+  );
+}
+
+function CountryAutocompleteValueProp() {
+  const [value, setValue] = React.useState();
+
+  return (
+    <Autocomplete
+      label="Länder"
+      value={value}
+      onOptionSelected={(object: any) => {
+        setValue(object);
+        window.alert(object);
+      }}
+      onLoadOptions={(q: string) => api.queryCountries(q)}
+      textProp={option => option.name}
+      valueProp={option => option.region}
+    />
+  );
+}
+
+function CountryAutocompleteCustomRenderFunction() {
+  const [value, setValue] = React.useState();
+
+  return (
+    <Autocomplete
+      label="Länder"
+      value={value}
+      onOptionSelected={(object: any) => setValue(object)}
+      onLoadOptions={(q: string) => api.queryCountries(q)}
+      textProp={option => option.name}
+      renderOption={(element, query) => (
         <div>
-          <Typography>{HighlightQuery(object.name, query)}</Typography>
-          <Typography>{HighlightQuery(object.region, query)}</Typography>
+          <Typography>{HighlightQuery(element.name, query)}</Typography>
+          <Typography>
+            {HighlightQuery(element.region, query, {
+              color: "pink",
+              backgroundColor: "green"
+            })}
+          </Typography>
         </div>
       )}
     />
   );
 }
 
+function KeyVlaueAutocomplete() {
+  const [value, setValue] = React.useState();
+
+  return (
+    <Autocomplete
+      label="Key Value Example"
+      value={value}
+      onOptionSelected={(object: any) => setValue(object)}
+      onLoadOptions={(q: string) => api.queryKeyValue(q)}
+    />
+  );
+}
+
 storiesOf("Autocomplete", module).add("Autocomplete", () => (
   <Paper style={{ minWidth: "600px", minHeight: "600px", padding: "10px" }}>
-    <Formik
-      initialValues={{
-        country: ""
-      }}
-      onSubmit={(values, actions) => {
-        setTimeout(() => {
-          alert(JSON.stringify(values, null, 2));
-        });
-      }}
-      render={(formikProps: FormikProps<any>) => (
-        <form onSubmit={formikProps.handleSubmit} autoComplete="off">
-          <FormikAutocompleteField
-            name="country"
-            label="Länder"
-            onLoadOptions={(q: string) => api.query(q)}
-            textProp={(value: any) => value.name}
-            valueProp={(value: any) => value.name}
-          />
-          <Button type="submit">Save</Button>
-          <Button onClick={formikProps.handleReset}>Reset</Button>
-        </form>
-      )}
-    />
+    <Typography>
+      Autocomplete example with "Key Value" list as options
+    </Typography>
+    <KeyVlaueAutocomplete />
     <Divider style={{ margin: "20px" }} />
-    <DummyAutocomplete />
+    <Typography>
+      Autocomplete example with list of complex objects as options using
+      textProp
+    </Typography>
+    <CountryAutocomplete />
+    <Divider style={{ margin: "20px" }} />
+    <Typography>
+      Autocomplete example with list of complex objects as options using
+      textProp and a custom render-function
+    </Typography>
+    <CountryAutocompleteCustomRenderFunction />
+    <Divider style={{ margin: "20px" }} />
+    <Typography>
+      Autocomplete example with list of complex objects as options using
+      textProp and valueProp
+    </Typography>
+    <CountryAutocompleteValueProp />
   </Paper>
 ));
