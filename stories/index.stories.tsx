@@ -30,16 +30,16 @@ function DummyAutocomplete() {
     <Autocomplete
       label="Länder"
       value={value}
-      textProp={(value: any) => value.name}
-      onOptionSelected={(value: any) => setValue(value)}
+      textProp={(object: any) => object.name}
+      onOptionSelected={(object: any) => setValue(object)}
       onLoadOptions={(q: string) => api.query(q)}
-      renderOption={(value: any, query: string) => (
+      renderOption={(object: any, query: string) => (
         <div>
-          <Typography>{HighlightQuery(value.name, query)}</Typography>
-          <Typography>{HighlightQuery(value.region, query)}</Typography>
+          <Typography>{HighlightQuery(object.name, query)}</Typography>
+          <Typography>{HighlightQuery(object.region, query)}</Typography>
         </div>
       )}
-    ></Autocomplete>
+    />
   );
 }
 
@@ -56,20 +56,19 @@ storiesOf("Autocomplete", module).add("Autocomplete", () => (
       }}
       render={(formikProps: FormikProps<any>) => (
         <form onSubmit={formikProps.handleSubmit} autoComplete="off">
-          
           <FormikAutocompleteField
             name="country"
             label="Länder"
             onLoadOptions={(q: string) => api.query(q)}
             textProp={(value: any) => value.name}
-            valueProp={(value:any)=>value.name}
-          ></FormikAutocompleteField>
+            valueProp={(value: any) => value.name}
+          />
           <Button type="submit">Save</Button>
           <Button onClick={formikProps.handleReset}>Reset</Button>
         </form>
       )}
     />
-    <Divider style={{ margin: "20px" }}></Divider>
+    <Divider style={{ margin: "20px" }} />
     <DummyAutocomplete />
   </Paper>
 ));
