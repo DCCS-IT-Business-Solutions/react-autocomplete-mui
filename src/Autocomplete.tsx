@@ -15,7 +15,7 @@ import { TextFieldProps } from "@material-ui/core/TextField";
 
 export interface IAutocompleteBaseProps {
   onOptionSelected?: (value: any) => void;
-  onLoadOptions: (query: string) => Promise<any[]>;
+  onLoadOptions: (query: string) => Promise<any[]> | any[];
   renderOption?: (element: any, query: string) => React.ReactNode;
   renderNoOptionsFound?: () => React.ReactNode;
   maxShownOptions?: number;
@@ -109,17 +109,10 @@ export function Autocomplete(props: IAutocompleteProps) {
         clearTimeout(timer);
       }
       setTimer(
-        setTimeout(() => {
-          onLoadOptions(textFieldValue || "").then(
-            result => {
-              setSuggestions(result);
-              setHighlightedOption(0);
-              setLoading(false);
-            },
-            error => {
-              setLoading(false);
-            }
-          );
+        setTimeout(async () => {
+          const result = await onLoadOptions(textFieldValue || "");
+          setSuggestions(result);
+          setLoading(false);
           if (timer) {
             clearTimeout(timer);
           }
@@ -230,8 +223,8 @@ Autocomplete.defaultProps = {
   onOptionSelected: (value: any) => {
     window.alert(value);
   },
-  textProp: (option: any) => option.toString(),
-  valueProp: (option: any) => option,
+  textProp: (option: any) => (option.value ? option.value : option.toString()),
+  valueProp: (option: any) => (option.id ? option.id : option),
   maxShownOptions: 10,
   maxHeightOptionsList: 500,
   renderNoOptionsFound: () => <Typography>No matches found!</Typography>
