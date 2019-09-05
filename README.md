@@ -14,7 +14,53 @@ This command will download and install react-autocomplete-mui
 
 ## How it works
 
-#ME HAS STILL TODO
+Example for Autcomplete with a list of as options
+**textProp** uses `object.value` or `object.toString()` (if there is no property _value_) per default
+**valueProp** uses `object.id` or `object` (if there is no property _id_) per default
+
+```javascript
+<Autocomplete
+  label="Key Value Example"
+  value={value}
+  onOptionSelected={(object: any) => /*Do something with the id*/}
+  onLoadOptions={(q: string) => /*return the filtered list of options*/ }
+/>
+```
+
+Example for Autocomplete with a list of complex objects
+
+```javascript
+<Autocomplete
+  label="Länder"
+  value={value}
+  onOptionSelected={(object: any) => /*Do something with the id*/}
+  onLoadOptions={(q: string) => /*return the filtered list of options*/ }
+  textProp={option => option.name}
+/>
+```
+
+Example for Autocomplete with a list of complex objects and a custom `renderOption` function
+
+```javascript
+<Autocomplete
+  label="Länder"
+  value={value}
+  onOptionSelected={(object: any) => /*Do something with the id*/}
+  onLoadOptions={(q: string) => /*return the filtered list of options*/ }
+  textProp={option => option.name}
+  renderOption={(element, query) => (
+    <div>
+      <Typography>{HighlightQuery(element.name, query)}</Typography>
+      <Typography>
+        {HighlightQuery(element.region, query, {
+          color: "pink",
+          backgroundColor: "green"
+        })}
+      </Typography>
+    </div>
+  )}
+/>
+```
 
 ## Contributing
 
