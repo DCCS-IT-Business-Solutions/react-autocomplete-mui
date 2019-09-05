@@ -56,6 +56,7 @@ storiesOf("Autocomplete", module).add("Autocomplete", () => (
       }}
       render={(formikProps: FormikProps<any>) => (
         <form onSubmit={formikProps.handleSubmit} autoComplete="off">
+          
           <FormikAutocompleteField
             name="country"
             label="Länder"
