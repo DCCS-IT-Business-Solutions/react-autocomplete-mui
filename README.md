@@ -15,3 +15,9 @@ This command will download and install react-autocomplete-mui
 ## How it works
 
 #ME HAS STILL TODO
+
+## Contributing
+
+### License
+
+@dccs/react-autocomplete-mui is [MIT licensed](https://github.com/facebook/react/blob/master/LICENSE)
