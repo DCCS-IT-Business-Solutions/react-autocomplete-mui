@@ -2,7 +2,7 @@ import * as React from "react";
 import { TextFieldProps } from "@material-ui/core/TextField";
 export interface IAutocompleteBaseProps {
     onOptionSelected?: (value: any) => void;
-    onLoadOptions: (query: string) => Promise<any[]>;
+    onLoadOptions: (query: string) => Promise<any[]> | any[];
     renderOption?: (element: any, query: string) => React.ReactNode;
     renderNoOptionsFound?: () => React.ReactNode;
     maxShownOptions?: number;
