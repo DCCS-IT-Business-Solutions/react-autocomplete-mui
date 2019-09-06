@@ -2,7 +2,6 @@ import * as React from "react";
 
 import { storiesOf } from "@storybook/react";
 
-import urljoin from "url-join";
 import { Autocomplete, HighlightQuery } from "../src/Autocomplete";
 import { Paper, Divider, Typography } from "@material-ui/core";
 import { countries, keyValueList } from "./data";

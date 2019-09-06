@@ -35,10 +35,7 @@
     "url": "https://github.com/DCCS-IT-Business-Solutions/react-autocomplete-mui/issues"
   },
   "homepage": "https://github.com/DCCS-IT-Business-Solutions/react-autocomplete-mui#readme",
-  "dependencies": {
-    "@types/url-join": "^4.0.0",
-    "url-join": "^4.0.1"
-  },
+  "dependencies": {},
   "peerDependencies": {
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
