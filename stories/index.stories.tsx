@@ -2,9 +2,10 @@ import * as React from "react";
 
 import { storiesOf } from "@storybook/react";
 
-import { Autocomplete, HighlightQuery } from "../src/Autocomplete";
 import { Paper, Divider, Typography } from "@material-ui/core";
 import { countries, keyValueList } from "./data";
+import { Autocomplete } from "../src/Autocomplete";
+import { HighlightQuery } from "../src/HighlightQuery";
 
 const api = {
   queryCountries: (query: string) =>

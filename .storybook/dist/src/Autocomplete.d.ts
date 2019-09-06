@@ -2621,4 +2621,3 @@ export declare namespace Autocomplete {
         };
     };
 }
-export declare function HighlightQuery(text: string, query: string, style?: React.CSSProperties): string | JSX.Element;
