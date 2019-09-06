@@ -7,12 +7,22 @@ it("should render", () => {
   expect(sut).toMatchSnapshot();
 });
 
-it("test HighlightQuery", () => {
-  const sut = shallow(HighlightQuery("this is a test string", "test"));
-
-  // const highlightedSpan = sut.find("<span>");
-  // // tslint:disable-next-line: no-console
-  // console.log(highlightedSpan);
-  // expect(highlightedSpan).toHaveProperty("style");
-  // // expect(highlightedSpan).toHaveProperty("style.fontWeight");
+it("should render with query being null", () => {
+  const sut = render(HighlightQuery("this is a test string", null));
+  expect(sut).toMatchSnapshot();
 });
+
+it("should render with text being null", () => {
+  const sut = render(HighlightQuery(null, "test"));
+  expect(sut).toMatchSnapshot();
+});
+
+// it("test HighlightQuery", () => {
+//   const sut = shallow(HighlightQuery("this is a test string", "test"));
+
+//   const highlightedSpan = sut.find("span");
+//   // tslint:disable-next-line: no-console
+//   console.log(highlightedSpan);
+//   expect(highlightedSpan).toHaveProperty("style");
+//   // expect(highlightedSpan).toHaveProperty("style.fontWeight");
+// });

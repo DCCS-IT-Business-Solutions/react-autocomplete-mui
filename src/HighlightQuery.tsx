@@ -6,7 +6,12 @@ export function HighlightQuery(
   style?: React.CSSProperties,
   ...others: any[]
 ) {
-  if (query === null || query.length === 0) {
+  if (
+    query === null ||
+    query.length === 0 ||
+    text === null ||
+    text.length === 0
+  ) {
     return <span>{text}</span>;
   }
 
