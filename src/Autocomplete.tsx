@@ -12,6 +12,7 @@ import {
 } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import { TextFieldProps } from "@material-ui/core/TextField";
+import { HighlightQuery } from "./HighlightQuery";
 
 export interface IAutocompleteBaseProps {
   onOptionSelected?: (value: any) => void;
@@ -329,28 +330,4 @@ function OptionItem(props: IOptionItemProps) {
       </ListItem>
     );
   }, [props.highlightedOption, props.renderOption]);
-}
-
-export function HighlightQuery(
-  text: string,
-  query: string,
-  style: React.CSSProperties = { fontWeight: "bold" }
-) {
-  if (query === null || query.length === 0) {
-    return text;
-  }
-
-  const startingIndex = text.toLowerCase().indexOf(query.toLowerCase(), 0);
-
-  return startingIndex > -1 ? (
-    <span>
-      {text.substring(0, startingIndex)}
-      <span style={style}>
-        {text.substring(startingIndex, startingIndex + query.length)}
-      </span>
-      {text.substring(startingIndex + query.length)}
-    </span>
-  ) : (
-    text
-  );
 }
