@@ -17,12 +17,11 @@ it("should render with text being null", () => {
   expect(sut).toMatchSnapshot();
 });
 
-// it("test HighlightQuery", () => {
-//   const sut = shallow(HighlightQuery("this is a test string", "test"));
+it("should highlight 'test'", () => {
+  const sut = shallow(HighlightQuery("this is a test string", "test"));
 
-//   const highlightedSpan = sut.find("span");
-//   // tslint:disable-next-line: no-console
-//   console.log(highlightedSpan);
-//   expect(highlightedSpan).toHaveProperty("style");
-//   // expect(highlightedSpan).toHaveProperty("style.fontWeight");
-// });
+  const highlightedSpan = sut.find("span > span").at(0);
+  // tslint:disable-next-line: no-console
+  expect(highlightedSpan).not.toBeNull();
+  // expect(highlightedSpan).toHaveProperty("style.fontWeight");
+});
