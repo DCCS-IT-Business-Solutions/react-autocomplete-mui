@@ -7,7 +7,7 @@ export function HighlightQuery(
   ...others: any[]
 ) {
   if (query === null || query.length === 0) {
-    return <span>text</span>;
+    return <span>{text}</span>;
   }
 
   const defaultStyle: React.CSSProperties = { fontWeight: "bold" };
@@ -23,6 +23,6 @@ export function HighlightQuery(
       {text.substring(startingIndex + query.length)}
     </span>
   ) : (
-    <span>text</span>
+    <span>{text}</span>
   );
 }
