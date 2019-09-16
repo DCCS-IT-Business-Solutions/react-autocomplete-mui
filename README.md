@@ -1,6 +1,9 @@
 # react-autocomplete-mui &middot; ![travis build](https://img.shields.io/travis/DCCS-IT-Business-Solutions/react-autocomplete-mui.svg) ![npm version](https://img.shields.io/npm/v/@dccs/react-autocomplete-mui.svg)
 
-Simple Formik <-> MaterialUI wrappers. [https://dccs-it-business-solutions.github.io/react-autocomplete-mui/](https://dccs-it-business-solutions.github.io/react-autocomplete-mui/)
+Simple Autocomplete using Material-UI
+
+## Demos
+[https://dccs-it-business-solutions.github.io/react-autocomplete-mui/](https://dccs-it-business-solutions.github.io/react-autocomplete-mui/)
 
 ## Installation
 
