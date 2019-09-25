@@ -12,7 +12,7 @@ import {
 } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import { TextFieldProps } from "@material-ui/core/TextField";
-import { HighlightQuery } from "./HighlightQuery";
+import { HighlightQuery } from "@dccs/utils";
 
 export interface IAutocompleteBaseProps {
   onOptionSelected?: (value: any) => void;
