@@ -36,19 +36,21 @@
     "url": "https://github.com/DCCS-IT-Business-Solutions/react-autocomplete-mui/issues"
   },
   "homepage": "https://github.com/DCCS-IT-Business-Solutions/react-autocomplete-mui#readme",
-  "dependencies": {},
+  "dependencies": {
+    "@dccs/utils": "^0.2.1",
+    "use-debounce": "^3.0.1"
+  },
   "peerDependencies": {
-    "@material-ui/core": "^4.3.1",
-    "@dccs/utils": "^0.2.1"
+    "@material-ui/core": "^4.3.1"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
     "@material-ui/core": "4.3.1",
     "@material-ui/icons": "4.2.1",
-    "@storybook/addon-actions": "^5.1.10",
-    "@storybook/addon-links": "^5.1.10",
-    "@storybook/addons": "^5.1.10",
-    "@storybook/react": "^5.1.10",
+    "@storybook/addon-actions": "^5.2.0",
+    "@storybook/addon-links": "^5.2.0",
+    "@storybook/addons": "^5.2.0",
+    "@storybook/react": "^5.2.0",
     "@types/enzyme": "^3.10.3",
     "@types/jest": "^24.0.17",
     "@types/react": "16.8.25",

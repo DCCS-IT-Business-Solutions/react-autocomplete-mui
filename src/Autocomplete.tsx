@@ -13,6 +13,7 @@ import {
 import Typography from "@material-ui/core/Typography";
 import { TextFieldProps } from "@material-ui/core/TextField";
 import { HighlightQuery } from "@dccs/utils";
+import { useDebounce } from "use-debounce";
 
 export interface IAutocompleteBaseProps {
   onOptionSelected?: (value: any) => void;
@@ -49,6 +50,7 @@ export function Autocomplete(props: IAutocompleteProps) {
     textProp(value || "")
   );
   const [highlightedOption, setHighlightedOption] = React.useState<number>(0);
+  const [debouncedQuery] = useDebounce<string>(textFieldValue, 500);
 
   const textFieldRef = React.useRef<HTMLDivElement>(null);
 
@@ -101,26 +103,22 @@ export function Autocomplete(props: IAutocompleteProps) {
     }
   }
 
-  const [timer, setTimer] = React.useState();
-
   React.useEffect(() => {
     if (isFocused) {
       setLoading(true);
-      if (timer) {
-        clearTimeout(timer);
-      }
-      setTimer(
-        setTimeout(async () => {
-          const result = await onLoadOptions(textFieldValue || "");
-          setSuggestions(result);
-          setLoading(false);
-          if (timer) {
-            clearTimeout(timer);
-          }
-        }, 500)
-      );
     }
-  }, [textFieldValue, isFocused]);
+  }, [textFieldValue]);
+
+  async function loadOptions(query: string) {
+    window.console.log(query);
+    const result = await onLoadOptions(query || "");
+    setSuggestions(result);
+    setLoading(false);
+  }
+
+  React.useEffect(() => {
+    loadOptions(debouncedQuery);
+  }, [debouncedQuery]);
 
   React.useEffect(() => {
     if (value) {
@@ -168,6 +166,7 @@ export function Autocomplete(props: IAutocompleteProps) {
         {...others}
         onFocus={e => {
           setIsFocused(true);
+          onLoadOptions(textFieldValue);
         }}
         onBlur={(e: any) => {
           if (suggestions) {
@@ -179,6 +178,7 @@ export function Autocomplete(props: IAutocompleteProps) {
         onChange={e => {
           setIsFocused(true);
           setTextFieldValue(e.target.value);
+          onLoadOptions(e.target.value);
         }}
         value={textFieldValue || ""}
       />

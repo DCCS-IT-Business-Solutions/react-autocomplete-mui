@@ -11,7 +11,12 @@ const api = {
   queryKeyValue: (query: string) =>
     new Promise<any[]>((res, rej) =>
       setTimeout(
-        () => res(keyValueList.filter(c => c.value.includes(query))),
+        () =>
+          res(
+            keyValueList.filter(c =>
+              c.value.toLocaleLowerCase().includes(query.toLowerCase())
+            )
+          ),
         1000
       )
     )
