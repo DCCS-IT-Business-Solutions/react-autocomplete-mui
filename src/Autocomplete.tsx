@@ -110,11 +110,30 @@ export function Autocomplete(props: IAutocompleteProps) {
   }, [textFieldValue]);
 
   async function loadOptions(query: string) {
-    window.console.log(query);
     const result = await onLoadOptions(query || "");
     setSuggestions(result);
     setLoading(false);
   }
+
+  async function initValue() {
+    setLoading(true);
+    const result = await onLoadOptions("");
+    setSuggestions(result);
+    setLoading(false);
+    if (result) {
+      const selectedSuggestions = result.find(o => valueProp(o) === value);
+      console.log(selectedSuggestions);
+      if (selectedSuggestions) {
+        setTextFieldValue(textProp(selectedSuggestions));
+      }
+    }
+  }
+
+  React.useEffect(() => {
+    if (value) {
+      initValue();
+    }
+  }, []);
 
   React.useEffect(() => {
     loadOptions(debouncedQuery);

@@ -36,6 +36,21 @@ function CountryAutocomplete() {
   );
 }
 
+function CountryAutocompleteWithInitalValue() {
+  const [value, setValue] = React.useState("Austria");
+
+  return (
+    <Autocomplete
+      label="Länder"
+      value={value}
+      onOptionSelected={(object: any) => setValue(object)}
+      onLoadOptions={(q: string) => api.queryCountries(q)}
+      textProp={option => option.name}
+      valueProp={option => option.name}
+    />
+  );
+}
+
 function CountryAutocompleteValueProp() {
   const [value, setValue] = React.useState();
 
@@ -116,5 +131,11 @@ storiesOf("Autocomplete", module).add("Autocomplete", () => (
       textProp and valueProp
     </Typography>
     <CountryAutocompleteValueProp />
+    <Divider style={{ margin: "20px" }} />
+    <Typography>
+      Autocomplete example with list of complex objects as options using
+      textProp and valueProp with an initialValue
+    </Typography>
+    <CountryAutocompleteWithInitalValue />
   </Paper>
 ));
