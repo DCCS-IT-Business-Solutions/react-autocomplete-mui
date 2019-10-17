@@ -122,7 +122,6 @@ export function Autocomplete(props: IAutocompleteProps) {
     setLoading(false);
     if (result) {
       const selectedSuggestions = result.find(o => valueProp(o) === value);
-      console.log(selectedSuggestions);
       if (selectedSuggestions) {
         setTextFieldValue(textProp(selectedSuggestions));
       }
