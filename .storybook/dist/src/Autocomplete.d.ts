@@ -2600,6 +2600,15 @@ export declare namespace Autocomplete {
                     "name": string;
                 };
             };
+            "css": {
+                "defaultValue": null;
+                "description": string;
+                "name": string;
+                "required": boolean;
+                "type": {
+                    "name": string;
+                };
+            };
             "hiddenLabel": {
                 "defaultValue": null;
                 "description": string;
