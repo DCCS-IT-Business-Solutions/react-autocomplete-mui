@@ -1,6 +1,6 @@
 import * as React from "react";
 import { storiesOf } from "@storybook/react";
-import { Paper, Divider, Typography } from "@material-ui/core";
+import { Paper, Divider, Typography, Button } from "@material-ui/core";
 import { HighlightQuery } from "@dccs/utils";
 import { countries, keyValueList } from "./data";
 import { Autocomplete } from "../src/Autocomplete";
@@ -40,14 +40,23 @@ function CountryAutocompleteWithInitalValue() {
   const [value, setValue] = React.useState("Austria");
 
   return (
-    <Autocomplete
-      label="Länder"
-      value={value}
-      onOptionSelected={(object: any) => setValue(object)}
-      onLoadOptions={(q: string) => api.queryCountries(q)}
-      textProp={option => option.name}
-      valueProp={option => option.name}
-    />
+    <div>
+      <Autocomplete
+        label="Länder"
+        value={value}
+        onOptionSelected={(object: any) => setValue(object)}
+        onLoadOptions={(q: string) => api.queryCountries(q)}
+        textProp={option => option.name}
+        valueProp={option => option.name}
+      />
+      <Button
+        onClick={() => {
+          setValue("Austria");
+        }}
+      >
+        <Typography>Reset</Typography>
+      </Button>
+    </div>
   );
 }
 

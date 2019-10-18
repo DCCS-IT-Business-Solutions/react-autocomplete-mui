@@ -103,6 +103,10 @@ export function Autocomplete(props: IAutocompleteProps) {
     }
   }
 
+  const allSuggestions = React.useMemo(() => {
+    return onLoadOptions("");
+  }, []);
+
   React.useEffect(() => {
     if (isFocused) {
       setLoading(true);
@@ -115,22 +119,21 @@ export function Autocomplete(props: IAutocompleteProps) {
     setLoading(false);
   }
 
-  async function initValue() {
+  async function setValueAsTextFieldValue() {
     setLoading(true);
-    const result = await onLoadOptions("");
-    setSuggestions(result);
-    setLoading(false);
-    if (result) {
+    if (allSuggestions) {
+      const result = await allSuggestions;
       const selectedSuggestions = result.find(o => valueProp(o) === value);
       if (selectedSuggestions) {
         setTextFieldValue(textProp(selectedSuggestions));
       }
     }
+    setLoading(false);
   }
 
   React.useEffect(() => {
     if (value) {
-      initValue();
+      setValueAsTextFieldValue();
     }
   }, []);
 
@@ -141,9 +144,7 @@ export function Autocomplete(props: IAutocompleteProps) {
   React.useEffect(() => {
     if (value) {
       if (valueProp) {
-        if (suggestions) {
-          setTextFieldValue(textProp(suggestions[highlightedOption]));
-        }
+        setValueAsTextFieldValue();
       } else {
         setTextFieldValue(textProp(value));
       }
@@ -157,9 +158,7 @@ export function Autocomplete(props: IAutocompleteProps) {
     if (!isFocused) {
       if (value) {
         if (valueProp) {
-          if (suggestions) {
-            setTextFieldValue(textProp(suggestions[highlightedOption]));
-          }
+          setValueAsTextFieldValue();
         } else {
           setTextFieldValue(textProp(value));
         }
