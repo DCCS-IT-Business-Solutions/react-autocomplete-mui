@@ -37,7 +37,7 @@ function CountryAutocomplete() {
 }
 
 function CountryAutocompleteWithInitalValue() {
-  const [value, setValue] = React.useState("Austria");
+  const [value, setValue] = React.useState("AUT");
 
   return (
     <div>
@@ -47,11 +47,11 @@ function CountryAutocompleteWithInitalValue() {
         onOptionSelected={(object: any) => setValue(object)}
         onLoadOptions={(q: string) => api.queryCountries(q)}
         textProp={option => option.name}
-        valueProp={option => option.name}
+        valueProp={option => option.alpha3Code}
       />
       <Button
         onClick={() => {
-          setValue("Austria");
+          setValue("AUT");
         }}
       >
         <Typography>Reset</Typography>

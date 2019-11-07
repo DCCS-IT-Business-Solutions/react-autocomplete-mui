@@ -86,7 +86,9 @@ export function Autocomplete(props: IAutocompleteProps) {
         e.preventDefault();
         if (suggestions) {
           const element = suggestions[highlightedOption];
-          onOptionSelected(valueProp(element));
+          if (element) {
+            onOptionSelected(valueProp(element));
+          }
         }
         if (textFieldRef.current != null) {
           textFieldRef.current.blur();
@@ -167,8 +169,9 @@ export function Autocomplete(props: IAutocompleteProps) {
   }, [isFocused]);
 
   return (
-    <div onKeyDown={isFocused ? handleKeyDown : undefined}>
+    <React.Fragment>
       <TextField
+        onKeyDown={isFocused ? handleKeyDown : undefined}
         ref={textFieldRef}
         InputProps={{
           endAdornment: loading ? (
@@ -186,8 +189,11 @@ export function Autocomplete(props: IAutocompleteProps) {
           onLoadOptions(textFieldValue);
         }}
         onBlur={(e: any) => {
-          if (suggestions) {
-            onOptionSelected(valueProp(suggestions[highlightedOption]));
+          if (suggestions && highlightedOption) {
+            const element = suggestions[highlightedOption];
+            if (element) {
+              onOptionSelected(valueProp(element));
+            }
           }
 
           setIsFocused(false);
@@ -233,7 +239,7 @@ export function Autocomplete(props: IAutocompleteProps) {
           )}
         </Popper>
       )}
-    </div>
+    </React.Fragment>
   );
 }
 
