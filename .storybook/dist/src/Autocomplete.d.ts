@@ -170,15 +170,6 @@ export declare namespace Autocomplete {
                     "name": string;
                 };
             };
-            "color": {
-                "defaultValue": null;
-                "description": string;
-                "name": string;
-                "required": boolean;
-                "type": {
-                    "name": string;
-                };
-            };
             "defaultValue": {
                 "defaultValue": null;
                 "description": string;
@@ -666,6 +657,15 @@ export declare namespace Autocomplete {
                 };
             };
             "autoSave": {
+                "defaultValue": null;
+                "description": string;
+                "name": string;
+                "required": boolean;
+                "type": {
+                    "name": string;
+                };
+            };
+            "color": {
                 "defaultValue": null;
                 "description": string;
                 "name": string;

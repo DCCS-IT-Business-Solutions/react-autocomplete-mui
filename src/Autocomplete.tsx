@@ -54,7 +54,7 @@ export function Autocomplete(props: IAutocompleteProps) {
 
   const textFieldRef = React.useRef<HTMLDivElement>(null);
 
-  function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
+  async function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
     switch (e.keyCode) {
       case 40: // down arrow
         e.stopPropagation();
@@ -135,6 +135,27 @@ export function Autocomplete(props: IAutocompleteProps) {
     setLoading(false);
   }
 
+  async function handleBlur(e: any) {
+    if (suggestions && highlightedOption) {
+      const element = suggestions[highlightedOption];
+      if (element) {
+        onOptionSelected(valueProp(element));
+      }
+    }
+    setIsFocused(false);
+  }
+
+  async function handleChange(e: any) {
+    setIsFocused(true);
+    setTextFieldValue(e.target.value);
+    onLoadOptions(e.target.value);
+  }
+
+  async function handleOnFocus() {
+    setIsFocused(true);
+    onLoadOptions(textFieldValue);
+  }
+
   React.useEffect(() => {
     if (value) {
       setValueAsTextFieldValue();
@@ -178,25 +199,9 @@ export function Autocomplete(props: IAutocompleteProps) {
         }}
         style={{ minWidth: "500px" }}
         {...others}
-        onFocus={() => {
-          setIsFocused(true);
-          onLoadOptions(textFieldValue);
-        }}
-        onBlur={(e: any) => {
-          if (suggestions && highlightedOption) {
-            const element = suggestions[highlightedOption];
-            if (element) {
-              onOptionSelected(valueProp(element));
-            }
-          }
-
-          setIsFocused(false);
-        }}
-        onChange={e => {
-          setIsFocused(true);
-          setTextFieldValue(e.target.value);
-          onLoadOptions(e.target.value);
-        }}
+        onFocus={handleOnFocus}
+        onBlur={handleBlur}
+        onChange={handleChange}
         value={textFieldValue || ""}
       />
       {isFocused && (
