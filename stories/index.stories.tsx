@@ -64,17 +64,20 @@ function CountryAutocompleteValueProp() {
   const [value, setValue] = React.useState();
 
   return (
-    <Autocomplete
-      label="Länder"
-      value={value}
-      onOptionSelected={(object: any) => {
-        setValue(object);
-        window.alert(object);
-      }}
-      onLoadOptions={(q: string) => api.queryCountries(q)}
-      textProp={option => option.name}
-      valueProp={option => option.region}
-    />
+    <div style={{ display: "flex", flexDirection: "column", width: "500px" }}>
+      <Typography variant="body1">{value || "undefiend"}</Typography>
+      <Typography variant="caption">Value</Typography>
+      <Autocomplete
+        label="Länder"
+        value={value}
+        onOptionSelected={(object: any) => {
+          setValue(object);
+        }}
+        onLoadOptions={(q: string) => api.queryCountries(q)}
+        textProp={option => option.name}
+        valueProp={option => option.alpha3Code}
+      />
+    </div>
   );
 }
 

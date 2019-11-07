@@ -8,9 +8,9 @@ import {
   Paper,
   Fade,
   CircularProgress,
-  InputAdornment
+  InputAdornment,
+  Typography
 } from "@material-ui/core";
-import Typography from "@material-ui/core/Typography";
 import { TextFieldProps } from "@material-ui/core/TextField";
 import { HighlightQuery } from "@dccs/utils";
 import { useDebounce } from "use-debounce";
@@ -125,7 +125,9 @@ export function Autocomplete(props: IAutocompleteProps) {
     setLoading(true);
     if (allSuggestions) {
       const result = await allSuggestions;
-      const selectedSuggestions = result.find(o => valueProp(o) === value);
+      const selectedSuggestions = result.find(
+        (o: any) => valueProp(o) === value
+      );
       if (selectedSuggestions) {
         setTextFieldValue(textProp(selectedSuggestions));
       }
@@ -176,7 +178,7 @@ export function Autocomplete(props: IAutocompleteProps) {
         }}
         style={{ minWidth: "500px" }}
         {...others}
-        onFocus={e => {
+        onFocus={() => {
           setIsFocused(true);
           onLoadOptions(textFieldValue);
         }}

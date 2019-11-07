@@ -98,6 +98,33 @@ export declare namespace Autocomplete {
                     "name": string;
                 };
             };
+            "onBlur": {
+                "defaultValue": null;
+                "description": string;
+                "name": string;
+                "required": boolean;
+                "type": {
+                    "name": string;
+                };
+            };
+            "onChange": {
+                "defaultValue": null;
+                "description": string;
+                "name": string;
+                "required": boolean;
+                "type": {
+                    "name": string;
+                };
+            };
+            "onFocus": {
+                "defaultValue": null;
+                "description": string;
+                "name": string;
+                "required": boolean;
+                "type": {
+                    "name": string;
+                };
+            };
             "variant": {
                 "defaultValue": null;
                 "description": string;
@@ -135,6 +162,15 @@ export declare namespace Autocomplete {
                 };
             };
             "autoFocus": {
+                "defaultValue": null;
+                "description": string;
+                "name": string;
+                "required": boolean;
+                "type": {
+                    "name": string;
+                };
+            };
+            "color": {
                 "defaultValue": null;
                 "description": string;
                 "name": string;
@@ -260,15 +296,6 @@ export declare namespace Autocomplete {
                     "name": string;
                 };
             };
-            "onChange": {
-                "defaultValue": null;
-                "description": string;
-                "name": string;
-                "required": boolean;
-                "type": {
-                    "name": string;
-                };
-            };
             "placeholder": {
                 "defaultValue": null;
                 "description": string;
@@ -341,6 +368,15 @@ export declare namespace Autocomplete {
                     "name": string;
                 };
             };
+            "ref": {
+                "defaultValue": null;
+                "description": string;
+                "name": string;
+                "required": boolean;
+                "type": {
+                    "name": string;
+                };
+            };
             "style": {
                 "defaultValue": null;
                 "description": string;
@@ -351,15 +387,6 @@ export declare namespace Autocomplete {
                 };
             };
             "title": {
-                "defaultValue": null;
-                "description": string;
-                "name": string;
-                "required": boolean;
-                "type": {
-                    "name": string;
-                };
-            };
-            "ref": {
                 "defaultValue": null;
                 "description": string;
                 "name": string;
@@ -639,15 +666,6 @@ export declare namespace Autocomplete {
                 };
             };
             "autoSave": {
-                "defaultValue": null;
-                "description": string;
-                "name": string;
-                "required": boolean;
-                "type": {
-                    "name": string;
-                };
-            };
-            "color": {
                 "defaultValue": null;
                 "description": string;
                 "name": string;
@@ -1277,25 +1295,7 @@ export declare namespace Autocomplete {
                     "name": string;
                 };
             };
-            "onFocus": {
-                "defaultValue": null;
-                "description": string;
-                "name": string;
-                "required": boolean;
-                "type": {
-                    "name": string;
-                };
-            };
             "onFocusCapture": {
-                "defaultValue": null;
-                "description": string;
-                "name": string;
-                "required": boolean;
-                "type": {
-                    "name": string;
-                };
-            };
-            "onBlur": {
                 "defaultValue": null;
                 "description": string;
                 "name": string;
