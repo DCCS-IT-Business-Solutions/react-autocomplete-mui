@@ -145,11 +145,7 @@ export function Autocomplete(props: IAutocompleteProps) {
 
   React.useEffect(() => {
     if (value) {
-      if (valueProp) {
-        setValueAsTextFieldValue();
-      } else {
-        setTextFieldValue(textProp(value));
-      }
+      setValueAsTextFieldValue();
     } else {
       setTextFieldValue("");
     }
@@ -159,11 +155,7 @@ export function Autocomplete(props: IAutocompleteProps) {
   React.useEffect(() => {
     if (!isFocused) {
       if (value) {
-        if (valueProp) {
-          setValueAsTextFieldValue();
-        } else {
-          setTextFieldValue(textProp(value));
-        }
+        setValueAsTextFieldValue();
       }
     }
   }, [isFocused]);
