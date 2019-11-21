@@ -1,355 +1,332 @@
 import * as React from "react";
-
+import { Autocomplete as MuiAutocomplete } from "@material-ui/lab";
 import {
-  TextField,
-  List,
-  ListItem,
-  Popper,
-  Paper,
-  Fade,
-  CircularProgress,
-  InputAdornment,
-  Typography
-} from "@material-ui/core";
-import { TextFieldProps } from "@material-ui/core/TextField";
+  AutocompleteProps as MuiAutocompleteProps,
+  RenderOptionState
+} from "@material-ui/lab/Autocomplete";
+import TextField, { TextFieldProps } from "@material-ui/core/TextField";
 import { HighlightQuery } from "@dccs/utils";
-import { useDebounce } from "use-debounce";
+import { Typography, MenuItem } from "@material-ui/core";
+import { FilterOptionsState } from "@material-ui/lab/useAutocomplete";
+import { string } from "prop-types";
 
-export interface IAutocompleteBaseProps {
-  onOptionSelected?: (value: any) => void;
-  onLoadOptions: (query: string) => Promise<any[]> | any[];
-  renderOption?: (element: any, query: string) => React.ReactNode;
-  renderNoOptionsFound?: () => React.ReactNode;
-  maxShownOptions?: number;
-  maxHeightOptionsList?: number;
-  textProp?: (option: any) => string;
-  valueProp?: (option: any) => string | number | any;
+interface IBaseProps<T>
+  extends Omit<MuiAutocompleteProps, "onChange" | "renderInput"> {
+  value?: any;
+  textProp: (option: T) => string;
+  keyProp: (option: T) => any;
+  onChange?: (e: React.ChangeEvent<{}>, value: any) => void;
+  textFieldProps?: TextFieldProps;
+  highlightQuery?: boolean;
+  highlightQueryStyle?: React.CSSProperties;
 }
 
-export type IAutocompleteProps = IAutocompleteBaseProps & TextFieldProps;
+interface IOptionArrayProps<T> extends IBaseProps<T> {
+  variant?: "default";
+  options?: T[];
+}
 
-export function Autocomplete(props: IAutocompleteProps) {
-  const newProps = { ...Autocomplete.defaultProps, ...props };
+interface IAsyncOptionArrayProps<T> extends IBaseProps<T> {
+  variant: "async";
+  onLoadOptions: (query: string) => Promise<T[]>;
+  valueToOption: (value: any) => T | Promise<T>;
+}
+
+export type AutocompleteProps<T> =
+  | IOptionArrayProps<T>
+  | IAsyncOptionArrayProps<T>;
+
+export function Autocomplete<T>(props: AutocompleteProps<T>) {
+  if (props.variant === "async") {
+    return <AsyncAutocomplete<T> {...props} />;
+  } else {
+    return <DefaultAutocomplete<T> {...props} />;
+  }
+}
+
+function DefaultAutocomplete<T>(props: IOptionArrayProps<T>) {
   const {
-    onOptionSelected,
-    onLoadOptions,
-    renderOption,
-    renderNoOptionsFound,
-    maxShownOptions,
-    maxHeightOptionsList,
+    onChange,
+    variant,
+    onInputChange,
+    textFieldProps,
+    keyProp,
     textProp,
-    valueProp,
+    options,
     value,
+    highlightQuery,
+    highlightQueryStyle,
     ...others
-  } = newProps;
+  } = props;
 
-  const [isFocused, setIsFocused] = React.useState<boolean>(false);
-  const [loading, setLoading] = React.useState<boolean>(false);
-  const [suggestions, setSuggestions] = React.useState<any[]>();
-  const [textFieldValue, setTextFieldValue] = React.useState(
-    textProp(value || "")
+  const [selectedOption, setSelectedOption] = React.useState<T | undefined>(
+    keyToOption(value)
   );
-  const [highlightedOption, setHighlightedOption] = React.useState<number>(0);
-  const [debouncedQuery] = useDebounce<string>(textFieldValue, 500);
+  const [inputValue, setInputValue] = React.useState<string>("");
 
-  const textFieldRef = React.useRef<HTMLDivElement>(null);
-
-  async function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
-    switch (e.keyCode) {
-      case 40: // down arrow
-        e.stopPropagation();
-        if (
-          (suggestions != null &&
-            suggestions.length <= highlightedOption + 1) ||
-          (maxShownOptions && maxShownOptions <= highlightedOption + 1)
-        ) {
-          setHighlightedOption(0);
-        } else {
-          setHighlightedOption(highlightedOption + 1);
+  function keyToOption(key: any) {
+    if (key) {
+      if (options && options.length > 0) {
+        const option = options.find(o => getKeyFromOption(o) === key);
+        if (option) {
+          return option;
         }
-        break;
-      case 38: // up arrow
-        e.stopPropagation();
-        if (highlightedOption === 0) {
-          if (maxShownOptions) {
-            setHighlightedOption(maxShownOptions - 1);
-          } else if (suggestions) {
-            setHighlightedOption(suggestions.length - 1);
-          }
-        } else {
-          setHighlightedOption(highlightedOption - 1);
-        }
-        break;
-      case 13: // enter
-      case 9: // tab
-        e.stopPropagation();
-        e.preventDefault();
-        if (suggestions) {
-          const element = suggestions[highlightedOption];
-          if (element) {
-            onOptionSelected(valueProp(element));
-          }
-        }
-        if (textFieldRef.current != null) {
-          textFieldRef.current.blur();
-        }
-        setIsFocused(false);
-        break;
-      case 27: // esc
-        e.stopPropagation();
-        if (textFieldRef.current != null) {
-          textFieldRef.current.blur();
-        }
-        setIsFocused(false);
-        break;
-    }
-  }
-
-  const allSuggestions = React.useMemo(() => {
-    return onLoadOptions("");
-  }, []);
-
-  React.useEffect(() => {
-    if (isFocused) {
-      setLoading(true);
-    }
-  }, [textFieldValue]);
-
-  async function loadOptions(query: string) {
-    const result = await onLoadOptions(query || "");
-    setSuggestions(result);
-    setLoading(false);
-  }
-
-  async function setValueAsTextFieldValue() {
-    setLoading(true);
-    if (allSuggestions) {
-      const result = await allSuggestions;
-      const selectedSuggestions = result.find(
-        (o: any) => valueProp(o) === value
-      );
-      if (selectedSuggestions) {
-        setTextFieldValue(textProp(selectedSuggestions));
       }
     }
-    setLoading(false);
+    return undefined;
   }
 
-  async function handleBlur(e: any) {
-    if (suggestions && highlightedOption) {
-      const element = suggestions[highlightedOption];
-      if (element) {
-        onOptionSelected(valueProp(element));
-      }
+  function handleChange(e: React.ChangeEvent<{}>, value: T) {
+    setSelectedOption(value);
+    if (onChange) {
+      onChange(e, value ? getKeyFromOption(value) : undefined);
     }
-    setIsFocused(false);
   }
 
-  async function handleChange(e: any) {
-    setIsFocused(true);
-    setTextFieldValue(e.target.value);
-    onLoadOptions(e.target.value);
+  function handleInputChange(e: React.ChangeEvent<{}>, value: string) {
+    setInputValue(value || "");
+    if (onInputChange) {
+      onInputChange(e, value);
+    }
   }
 
-  async function handleOnFocus() {
-    setIsFocused(true);
-    onLoadOptions(textFieldValue);
+  function getTextFromOption(option: any) {
+    const text = textProp(option as T);
+    if (text) {
+      return text;
+    }
+    // tslint:disable-next-line: no-console
+    console.error(
+      `@dccs/react-autocomplete-mui: TextProp returned undefiend or null!`,
+      option
+    );
+    return option.toString ? (option.toString() as string) : "";
   }
 
-  React.useEffect(() => {
-    if (value) {
-      setValueAsTextFieldValue();
+  function getKeyFromOption(option: any) {
+    const key = keyProp(option as T);
+    if (key) {
+      return key;
     }
-  }, []);
+    // tslint:disable-next-line: no-console
+    console.error(
+      `@dccs/react-autocomplete-mui: KeyProp returned undefiend or null!`,
+      option
+    );
+  }
 
-  React.useEffect(() => {
-    loadOptions(debouncedQuery);
-  }, [debouncedQuery]);
-
-  React.useEffect(() => {
-    if (value) {
-      setValueAsTextFieldValue();
-    } else {
-      setTextFieldValue("");
-    }
-    setIsFocused(false);
-  }, [value]);
-
-  React.useEffect(() => {
-    if (!isFocused) {
-      if (value) {
-        setValueAsTextFieldValue();
-      }
-    }
-  }, [isFocused]);
-
-  return (
-    <React.Fragment>
-      <TextField
-        onKeyDown={isFocused ? handleKeyDown : undefined}
-        ref={textFieldRef}
-        InputProps={{
-          endAdornment: loading ? (
-            <InputAdornment position="end">
-              <CircularProgress size={18} />
-            </InputAdornment>
-          ) : (
-            undefined
+  function renderOption(option: any, state: RenderOptionState) {
+    if (option) {
+      if (highlightQuery) {
+        return (
+          // <MenuItem selected={state.selected}>
+          HighlightQuery(
+            getTextFromOption(option),
+            state.inputValue,
+            highlightQueryStyle
           )
-        }}
-        style={{ minWidth: "500px" }}
-        {...others}
-        onFocus={handleOnFocus}
-        onBlur={handleBlur}
-        onChange={handleChange}
-        value={textFieldValue || ""}
-      />
-      {isFocused && (
-        <Popper
-          open={isFocused}
-          anchorEl={textFieldRef.current}
-          placement="bottom-start"
-          style={{ zIndex: 1000000 }}
-          transition
-        >
-          {({ TransitionProps }) => (
-            <Fade {...TransitionProps} timeout={10}>
-              <OptionList
-                loading={loading}
-                suggestions={suggestions}
-                highlightedOption={highlightedOption}
-                setHighlightedOption={setHighlightedOption}
-                onOptionSelected={onOptionSelected}
-                renderOption={element =>
-                  renderOption ? (
-                    renderOption(element, textFieldValue)
-                  ) : (
-                    <Typography>
-                      {HighlightQuery(textProp(element), textFieldValue)}
-                    </Typography>
-                  )
-                }
-                renderNoOptionsFound={renderNoOptionsFound}
-                maxOptions={maxShownOptions}
-                maxHeight={maxHeightOptionsList}
-                valueProp={valueProp}
-              />
-            </Fade>
-          )}
-        </Popper>
-      )}
-    </React.Fragment>
-  );
-}
-
-Autocomplete.defaultProps = {
-  onOptionSelected: (value: any) => {
-    window.alert(value);
-  },
-  textProp: (option: any) => (option.value ? option.value : option.toString()),
-  valueProp: (option: any) => (option.id ? option.id : option),
-  maxShownOptions: 10,
-  maxHeightOptionsList: 500,
-  renderNoOptionsFound: () => <Typography>No matches found!</Typography>
-};
-
-interface IOptionListProps {
-  loading: boolean;
-  suggestions?: any[];
-  maxOptions: number | undefined;
-
-  onOptionSelected: (e: any) => void;
-
-  highlightedOption: number;
-  setHighlightedOption: (value: number) => any;
-  renderOption: (element: any) => React.ReactNode;
-  renderNoOptionsFound: () => React.ReactNode;
-  maxHeight: number;
-  valueProp: (option: any) => string | number | any;
-}
-
-function OptionList(props: IOptionListProps) {
-  React.useEffect(() => {
-    const selectedLi = document.getElementById(
-      "react-autocomplete-mui-selected-option"
-    );
-    if (selectedLi) {
-      setTimeout(
-        () =>
-          selectedLi.scrollIntoView({ block: "center", behavior: "smooth" }),
-        5
+          // </MenuItem>
+        );
+      }
+      return (
+        // <MenuItem selected={state.selected}>
+        getTextFromOption(option)
+        // </MenuItem>
       );
     }
-  }, [props.highlightedOption]);
+    return "";
+  }
+
+  function handleGetOptionLabel(option: any) {
+    if (option) {
+      return getTextFromOption(option);
+    }
+    return "";
+  }
+
+  function handleFilterOptions(oArray: T[], state: FilterOptionsState) {
+    if (inputValue) {
+      return oArray.filter(o =>
+        stringCompare(getTextFromOption(o), inputValue)
+      );
+    } else {
+      return oArray;
+    }
+  }
 
   return (
-    <Paper elevation={6}>
-      {props.suggestions && props.suggestions.length > 0 ? (
-        <List
-          style={{
-            minWidth: 250,
-            maxHeight: props.maxHeight || 500,
-            overflow: "auto"
-          }}
-        >
-          {props.suggestions
-            .slice(0, props.maxOptions)
-            .map((element: any, index: number) => (
-              <OptionItem
-                key={index}
-                index={index}
-                element={element}
-                onOptionSelected={props.onOptionSelected}
-                renderOption={props.renderOption}
-                highlightedOption={props.highlightedOption}
-                setHighlightedOption={props.setHighlightedOption}
-                valueProp={props.valueProp}
-              />
-            ))}
-        </List>
-      ) : (
-        !props.loading && (
-          <ListItem key={"noMatch"} button>
-            {props.renderNoOptionsFound()}
-          </ListItem>
-        )
+    <MuiAutocomplete
+      getOptionLabel={handleGetOptionLabel}
+      renderOption={renderOption}
+      onChange={handleChange}
+      onInputChange={handleInputChange}
+      options={options}
+      value={selectedOption}
+      filterOptions={handleFilterOptions}
+      renderInput={params => (
+        <TextField
+          {...params}
+          autoComplete="off"
+          margin="normal"
+          style={{ minWidth: "240px" }}
+          {...textFieldProps}
+        />
       )}
-    </Paper>
+      {...others}
+    />
   );
 }
 
-interface IOptionItemProps {
-  index: number;
-  element: any;
-  onOptionSelected: (value: any) => void;
-  highlightedOption: number;
-  setHighlightedOption: (value: number) => void;
-  renderOption: (element: any) => React.ReactNode;
-  valueProp: (option: any) => string | number | any;
+function AsyncAutocomplete<T>(props: IAsyncOptionArrayProps<T>) {
+  const { onChange, variant, onInputChange, textFieldProps, ...others } = props;
+
+  function handleChange(e: React.ChangeEvent<{}>, value: T) {
+    if (onChange) {
+      onChange(e, value);
+    }
+  }
+
+  function handleInputChange(e: React.ChangeEvent<{}>, value: string) {
+    if (onInputChange) {
+      onInputChange(e, value);
+    }
+  }
+
+  return (
+    <MuiAutocomplete
+      onChange={handleChange}
+      onInputChange={handleInputChange}
+      renderInput={params => (
+        <TextField
+          {...params}
+          margin="normal"
+          style={{ minWidth: "240px" }}
+          {...textFieldProps}
+        />
+      )}
+      {...others}
+    />
+  );
 }
 
-function OptionItem(props: IOptionItemProps) {
-  return React.useMemo(() => {
-    return (
-      <ListItem
-        selected={props.index === props.highlightedOption}
-        id={
-          props.index === props.highlightedOption
-            ? "react-autocomplete-mui-selected-option"
-            : undefined
-        }
-        key={props.index}
-        button
-        onMouseDown={() => {
-          props.setHighlightedOption(props.index);
-        }}
-        onClick={(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-          e.stopPropagation();
-          props.onOptionSelected(props.valueProp(props.element));
-        }}
-      >
-        {props.renderOption(props.element)}
-      </ListItem>
-    );
-  }, [props.highlightedOption, props.renderOption]);
+function stringCompare(a: string, b: string) {
+  if (a === b) {
+    return true;
+  }
+  if (a.toLowerCase().includes(b.toLowerCase())) {
+    return true;
+  }
+  return false;
 }
+// export function Autocomplete(props: AutocompleteProps) {
+
+//   const [debouncedInputValue] = useDebounce<string>(inputValue || "", 500);
+//   //#region
+//   // function handleTextFieldChange(
+//   //   e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+//   //   value: string
+//   // ) {
+//   //   setLoading(true);
+//   //   setInputValue(value);
+//   //   if (onInputChange) {
+//   //     onInputChange(e, value);
+//   //   }
+//   // }
+
+//   // function handleChange(e: React.ChangeEvent<{}>, value: any) {
+//   //   if (!value) {
+//   //     if (!others.disableClearable && onChange) {
+//   //       onChange(e, undefined);
+//   //     }
+//   //     return;
+//   //   } else {
+//   //     if (onChange) {
+//   //       onChange(e, valueProp ? valueProp(value) : value);
+//   //     }
+//   //   }
+//   // }
+
+//   // async function handleGetOptionLabel(current: any) {
+//   //   if (current) {
+//   //     const option = await valueToOption(current);
+//   //     if (option) {
+//   //       if (option !== current) {
+//   //         if (textProp) {
+//   //           return textProp(option);
+//   //         }
+//   //       }
+//   //       return option.toString();
+//   //     } else {
+//   //       // tslint:disable-next-line: no-console
+//   //       console.error(`valueToOption(${current}) returned undefiend!`);
+//   //       return current.toString();
+//   //     }
+//   //   }
+//   //   return "";
+//   // }
+//   //#endregion
+
+//    return <MuiAutocomplete
+//             // TODO: KeyPropFn & valuePropFn
+//             value={options.find(element => element.key === value)}
+//             onChange={(event: any, value: any) => {
+//               if (value != null) {
+//                 form.setFieldValue(name, value.key);
+//               } else {
+//                 form.setFieldValue(name, "");
+//               }
+//             }}
+//             // TODO: Touched setzen für Error Message
+//             // TODO: Async testen
+//             options={options}
+//             getOptionLabel={(option: any) => option.value}
+//             renderInput={(params: RenderInputParams) => {
+//               return (
+//                 <TextField
+//                   {...params}
+//                   variant={variant as any}
+//                   {...defaultProps}
+//                   error={hasError(name, form, error)}
+//                   helperText={getHelperText(name, form, helperText)}
+//                   {...others}
+//                 />
+//               );
+//             }}
+//             {...autocompleteProps}
+//           />
+//   // return (
+//   //   <MuiAutocomplete
+//   //     autoSelect
+//   //     getOptionLabel={handleGetOptionLabel}
+//   //     filterOptions={filterOptions => filterOptions}
+//   //     options={options}
+//   //     loading={loading}
+//   //     {...others}
+//   //     value={value}
+//   //     onChange={onChange ? handleChange : undefined}
+//   //     onInputChange={handleTextFieldChange}
+//   //     renderInput={params => (
+//   //       <TextField
+//   //         label={label}
+//   //         {...params}
+//   //         {...textFieldProps}
+//   //         style={{
+//   //           minWidth: "240px",
+//   //           ...(textFieldProps && textFieldProps.style)
+//   //         }}
+//   //         // inputProps={{
+//   //         //   // ...params.InputProps,
+//   //         //   endAdornment: (
+//   //         //     <InputAdornment position="end">
+//   //         //       {loading ? (
+//   //         //         <CircularProgress color="inherit" size={20} />
+//   //         //       ) : null}
+//   //         //       {/* {params.InputProps.endAdornment} */}
+//   //         //     </InputAdornment>
+//   //         //   )
+//   //         // }}
+//   //       />
+//   //     )}
+//   //   />
+//   );
+// }
