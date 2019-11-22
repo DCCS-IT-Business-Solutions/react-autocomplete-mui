@@ -20,7 +20,7 @@ This command will download and install react-autocomplete-mui
 
 This package is based on the [@material-ui/lab/Autocomplete](https://material-ui.com/components/autocomplete/)
 
-Uncontrolled Autocomplete with static options
+<b>Uncontrolled Autocomplete with static options</b>
 
 ```javascript
    <Autocomplete<any>
@@ -31,11 +31,13 @@ Uncontrolled Autocomplete with static options
 />
 ```
 
-Controlled Autocomplete with options loaded async
+<b>Controlled Autocomplete with options loaded async</b>
 
 ```javascript
 <Autocomplete
   variant="async"
+  value={value}
+  onChange={(e, v) => setValue(v)}
   onLoadOptions={query => api.queryCountries(query)}
   keyToOption={key => api.getCountry(key)}
   keyProp={o => o.name}
