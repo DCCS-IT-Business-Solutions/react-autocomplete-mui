@@ -150,7 +150,7 @@ function DefaultAutocomplete() {
     <Autocomplete<any>
       value={value}
       options={countries}
-      onChange={(e, value) => setValue(value)}
+      onChange={(e, nValue) => setValue(nValue)}
       keyProp={o => o.name}
       textProp={o => o.name}
       disableClearable={true}
@@ -175,7 +175,7 @@ function AsyncAutocomplete() {
           }, 1000);
         })
       }
-      onChange={(e, value) => setValue(value)}
+      onChange={(e, nValue) => setValue(nValue)}
       keyProp={o => o.name}
       textProp={o => o.name}
       // disableClearable={true}
