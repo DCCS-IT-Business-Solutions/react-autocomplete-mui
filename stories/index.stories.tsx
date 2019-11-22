@@ -8,7 +8,18 @@ import { RenderOptionState } from "@material-ui/lab/Autocomplete";
 
 const api = {
   queryCountries: (query: string) =>
-    countries.filter(c => c.name.includes(query) || c.region.includes(query)),
+    new Promise<any[]>((res, rej) =>
+      setTimeout(
+        () =>
+          res(
+            countries.filter(
+              c => c.name.includes(query) || c.region.includes(query)
+            )
+          ),
+
+        1000
+      )
+    ),
   queryKeyValue: (query: string) =>
     new Promise<any[]>((res, rej) =>
       setTimeout(
@@ -148,9 +159,35 @@ function DefaultAutocomplete() {
   );
 }
 
+function AsyncAutocomplete() {
+  const [value, setValue] = React.useState("Austria");
+
+  return (
+    <Autocomplete<any>
+      value={value}
+      textFieldProps={{ label: "Async" }}
+      variant="async"
+      onLoadOptions={query => api.queryCountries(query)}
+      valueToOption={key =>
+        new Promise<any>((res, rej) => {
+          setTimeout(() => {
+            res(countries.find(c => c.name === key));
+          }, 1000);
+        })
+      }
+      onChange={(e, value) => setValue(value)}
+      keyProp={o => o.name}
+      textProp={o => o.name}
+      // disableClearable={true}
+      highlightQuery={true}
+    />
+  );
+}
+
 storiesOf("Autocomplete", module).add("Autocomplete", () => (
   <Paper style={{ minWidth: "600px", minHeight: "600px", padding: "10px" }}>
     <DefaultAutocomplete />
+    <AsyncAutocomplete />
     <Divider style={{ margin: "20px" }} />
     {/* <Typography>
       Autocomplete example with list of complex objects as options using
