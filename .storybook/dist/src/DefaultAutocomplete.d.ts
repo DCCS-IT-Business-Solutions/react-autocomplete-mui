@@ -1,14 +1,22 @@
 /// <reference types="react" />
-import { IAsyncOptionArrayProps, IOptionArrayProps } from "./types";
-export declare type AutocompleteProps<T> = IOptionArrayProps<T> | IAsyncOptionArrayProps<T>;
-export declare function Autocomplete<T>(props: AutocompleteProps<T>): JSX.Element;
-export declare namespace Autocomplete {
+import { IOptionArrayProps } from "./types";
+export declare function DefaultAutocomplete<T>(props: IOptionArrayProps<T>): JSX.Element;
+export declare namespace DefaultAutocomplete {
     var displayName: string;
     var __docgenInfo: {
         "description": string;
         "displayName": string;
         "props": {
             "variant": {
+                "defaultValue": null;
+                "description": string;
+                "name": string;
+                "required": boolean;
+                "type": {
+                    "name": string;
+                };
+            };
+            "options": {
                 "defaultValue": null;
                 "description": string;
                 "name": string;

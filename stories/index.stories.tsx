@@ -4,10 +4,22 @@ import { Paper, Divider, Typography, Button } from "@material-ui/core";
 import { HighlightQuery } from "@dccs/utils";
 import { countries, keyValueList } from "./data";
 import { Autocomplete } from "../src/Autocomplete";
+import { RenderOptionState } from "@material-ui/lab/Autocomplete";
 
 const api = {
   queryCountries: (query: string) =>
-    countries.filter(c => c.name.includes(query) || c.region.includes(query)),
+    new Promise<any[]>((res, rej) =>
+      setTimeout(
+        () =>
+          res(
+            countries.filter(
+              c => c.name.includes(query) || c.region.includes(query)
+            )
+          ),
+
+        1000
+      )
+    ),
   queryKeyValue: (query: string) =>
     new Promise<any[]>((res, rej) =>
       setTimeout(
@@ -19,114 +31,165 @@ const api = {
           ),
         1000
       )
+    ),
+  getValueForKey: (key: any) =>
+    new Promise<any>((res, rej) =>
+      setTimeout(() => res(keyValueList.find(c => c.id === key)), 1000)
     )
 };
 
-function CountryAutocomplete() {
-  const [value, setValue] = React.useState();
+// function CountryAutocomplete() {
+//   const [value, setValue] = React.useState();
+
+//   return (
+//     <Autocomplete
+//       label="Länder"
+//       value={value}
+//       onOptionSelected={(object: any) => setValue(object)}
+//       onLoadOptions={(q: string) => api.queryCountries(q)}
+//       textProp={option => option.name}
+//     />
+//   );
+// }
+
+// function CountryAutocompleteWithInitalValue() {
+//   const [value, setValue] = React.useState("AUT");
+
+//   return (
+//     <div>
+//       <Autocomplete
+//         label="Länder"
+//         value={value}
+//         onOptionSelected={(object: any) => setValue(object)}
+//         onLoadOptions={(q: string) => api.queryCountries(q)}
+//         textProp={option => option.name}
+//         valueProp={option => option.alpha3Code}
+//       />
+//       <Button
+//         onClick={() => {
+//           setValue("AUT");
+//         }}
+//       >
+//         <Typography>Reset</Typography>
+//       </Button>
+//     </div>
+//   );
+// }
+
+// function CountryAutocompleteValueProp() {
+//   const [value, setValue] = React.useState();
+
+//   return (
+//     <div style={{ display: "flex", flexDirection: "column", width: "500px" }}>
+//       <Typography variant="body1">{value || "undefiend"}</Typography>
+//       <Typography variant="caption">Value</Typography>
+//       <Autocomplete
+//         label="Länder"
+//         value={value}
+//         onOptionSelected={(object: any) => {
+//           setValue(object);
+//         }}
+//         onLoadOptions={(q: string) => api.queryCountries(q)}
+//         textProp={option => option.name}
+//         valueProp={option => option.alpha3Code}
+//       />
+//     </div>
+//   );
+// }
+
+// function CountryAutocompleteCustomRenderFunction() {
+//   const [value, setValue] = React.useState();
+
+//   return (
+//     <Autocomplete
+//       label="Länder"
+//       value={value}
+//       onOptionSelected={(object: any) => setValue(object)}
+//       onLoadOptions={(q: string) => api.queryCountries(q)}
+//       textProp={option => option.name}
+//       renderOption={(option: any, state: RenderOptionState) => (
+//         <div>
+//           <Typography>
+//             {HighlightQuery(option.name, state.inputValue)}
+//           </Typography>
+//           <Typography>
+//             {HighlightQuery(option.region, state.inputValue, {
+//               color: "pink",
+//               backgroundColor: "green"
+//             })}
+//           </Typography>
+//         </div>
+//       )}
+//     />
+//   );
+// }
+
+// function KeyVlaueAutocomplete() {
+//   const [value, setValue] = React.useState(1);
+
+//   return (
+//     <Autocomplete
+//       label="Key Value Example"
+//       value={value}
+//       valueProp={value => value.id}
+//       textProp={value => value.value}
+//       valueToOption={value => {
+//         api.getValueForKey(value);
+//       }}
+//       // onOptionSelected={(object: any) => setValue(object)}
+//       onChange={(e, value) => setValue(value)}
+//       onLoadOptions={(q: string) => api.queryKeyValue(q)}
+//     />
+//   );
+// }
+
+function DefaultAutocomplete() {
+  const [value, setValue] = React.useState("Austria");
 
   return (
-    <Autocomplete
-      label="Länder"
+    <Autocomplete<any>
       value={value}
-      onOptionSelected={(object: any) => setValue(object)}
-      onLoadOptions={(q: string) => api.queryCountries(q)}
-      textProp={option => option.name}
+      options={countries}
+      onChange={(e, nValue) => setValue(nValue)}
+      keyProp={o => o.name}
+      textProp={o => o.name}
+      disableClearable={true}
+      highlightQuery={true}
     />
   );
 }
 
-function CountryAutocompleteWithInitalValue() {
-  const [value, setValue] = React.useState("AUT");
+function AsyncAutocomplete() {
+  const [value, setValue] = React.useState("Austria");
 
   return (
-    <div>
-      <Autocomplete
-        label="Länder"
-        value={value}
-        onOptionSelected={(object: any) => setValue(object)}
-        onLoadOptions={(q: string) => api.queryCountries(q)}
-        textProp={option => option.name}
-        valueProp={option => option.alpha3Code}
-      />
-      <Button
-        onClick={() => {
-          setValue("AUT");
-        }}
-      >
-        <Typography>Reset</Typography>
-      </Button>
-    </div>
-  );
-}
-
-function CountryAutocompleteValueProp() {
-  const [value, setValue] = React.useState();
-
-  return (
-    <div style={{ display: "flex", flexDirection: "column", width: "500px" }}>
-      <Typography variant="body1">{value || "undefiend"}</Typography>
-      <Typography variant="caption">Value</Typography>
-      <Autocomplete
-        label="Länder"
-        value={value}
-        onOptionSelected={(object: any) => {
-          setValue(object);
-        }}
-        onLoadOptions={(q: string) => api.queryCountries(q)}
-        textProp={option => option.name}
-        valueProp={option => option.alpha3Code}
-      />
-    </div>
-  );
-}
-
-function CountryAutocompleteCustomRenderFunction() {
-  const [value, setValue] = React.useState();
-
-  return (
-    <Autocomplete
-      label="Länder"
+    <Autocomplete<any>
       value={value}
-      onOptionSelected={(object: any) => setValue(object)}
-      onLoadOptions={(q: string) => api.queryCountries(q)}
-      textProp={option => option.name}
-      renderOption={(element, query) => (
-        <div>
-          <Typography>{HighlightQuery(element.name, query)}</Typography>
-          <Typography>
-            {HighlightQuery(element.region, query, {
-              color: "pink",
-              backgroundColor: "green"
-            })}
-          </Typography>
-        </div>
-      )}
-    />
-  );
-}
-
-function KeyVlaueAutocomplete() {
-  const [value, setValue] = React.useState();
-
-  return (
-    <Autocomplete
-      label="Key Value Example"
-      value={value}
-      onOptionSelected={(object: any) => setValue(object)}
-      onLoadOptions={(q: string) => api.queryKeyValue(q)}
+      textFieldProps={{ label: "Async" }}
+      variant="async"
+      onLoadOptions={query => api.queryCountries(query)}
+      valueToOption={key =>
+        new Promise<any>((res, rej) => {
+          setTimeout(() => {
+            res(countries.find(c => c.name === key));
+          }, 1000);
+        })
+      }
+      onChange={(e, nValue) => setValue(nValue)}
+      keyProp={o => o.name}
+      textProp={o => o.name}
+      // disableClearable={true}
+      highlightQuery={true}
     />
   );
 }
 
 storiesOf("Autocomplete", module).add("Autocomplete", () => (
   <Paper style={{ minWidth: "600px", minHeight: "600px", padding: "10px" }}>
-    <Typography>
-      Autocomplete example with "Key Value" list as options
-    </Typography>
-    <KeyVlaueAutocomplete />
+    <DefaultAutocomplete />
+    <AsyncAutocomplete />
     <Divider style={{ margin: "20px" }} />
-    <Typography>
+    {/* <Typography>
       Autocomplete example with list of complex objects as options using
       textProp
     </Typography>
@@ -148,6 +211,6 @@ storiesOf("Autocomplete", module).add("Autocomplete", () => (
       Autocomplete example with list of complex objects as options using
       textProp and valueProp with an initialValue
     </Typography>
-    <CountryAutocompleteWithInitalValue />
+    <CountryAutocompleteWithInitalValue /> */}
   </Paper>
 ));
