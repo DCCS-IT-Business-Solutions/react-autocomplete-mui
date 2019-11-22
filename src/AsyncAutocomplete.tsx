@@ -127,6 +127,16 @@ export function AsyncAutocomplete<T>(props: IAsyncOptionArrayProps<T>) {
     );
   }
 
+  async function handleKeyToOption(key: any) {
+    if (options && options.length > 0) {
+      const option = options.find(o => getKeyFromOption(o) === key);
+      if (option) {
+        return option;
+      }
+    }
+    return await keyToOption(key);
+  }
+
   function handleValueChanged() {
     if (value) {
       if (value === oldValue) {
@@ -134,7 +144,8 @@ export function AsyncAutocomplete<T>(props: IAsyncOptionArrayProps<T>) {
       }
       setLoadingValue(true);
       setOldValue(value);
-      keyToOption(value).then(
+
+      handleKeyToOption(value).then(
         res => {
           if (res) {
             setInputValue(getKeyFromOption(res));
@@ -174,7 +185,7 @@ export function AsyncAutocomplete<T>(props: IAsyncOptionArrayProps<T>) {
       renderOption={renderOption}
       onChange={handleChange}
       onInputChange={handleInputChange}
-      options={options}
+      options={options || []}
       value={selectedOption}
       filterOptions={x => x}
       loading={loadingOptions || loadingValue}
