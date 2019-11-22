@@ -18,7 +18,7 @@ export function AsyncAutocomplete<T>(props: IAsyncOptionArrayProps<T>) {
     highlightQueryStyle,
     onLoadOptions,
     debounceOnLoadOptions,
-    valueToOption,
+    keyToOption,
     ...others
   } = props;
 
@@ -134,7 +134,7 @@ export function AsyncAutocomplete<T>(props: IAsyncOptionArrayProps<T>) {
       }
       setLoadingValue(true);
       setOldValue(value);
-      valueToOption(value).then(
+      keyToOption(value).then(
         res => {
           if (res) {
             setInputValue(getKeyFromOption(res));
@@ -145,7 +145,7 @@ export function AsyncAutocomplete<T>(props: IAsyncOptionArrayProps<T>) {
         err => {
           // tslint:disable-next-line: no-console
           console.error(
-            `@dccs/react-autocomplete-mui: Promise returned by valueToOption(${value}) was rejected!`,
+            `@dccs/react-autocomplete-mui: Promise returned by keyToOption(${value}) was rejected!`,
             `Reason:`,
             err
           );

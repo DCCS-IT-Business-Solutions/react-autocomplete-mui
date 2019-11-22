@@ -3,6 +3,7 @@
 Simple Autocomplete using Material-UI
 
 ## Demos
+
 [https://dccs-it-business-solutions.github.io/react-autocomplete-mui/](https://dccs-it-business-solutions.github.io/react-autocomplete-mui/)
 
 ## Installation
@@ -17,51 +18,28 @@ This command will download and install react-autocomplete-mui
 
 ## How it works
 
-Example for Autcomplete with a list of as options
-**textProp** uses `object.value` or `object.toString()` (if there is no property _value_) per default
-**valueProp** uses `object.id` or `object` (if there is no property _id_) per default
+This package is based on the [@material-ui/lab/Autocomplete](https://material-ui.com/components/autocomplete/)
+
+Uncontrolled Autocomplete with static options
 
 ```javascript
-<Autocomplete
-  label="Key Value Example"
-  value={value}
-  onOptionSelected={(object: any) => /*Do something with the id*/}
-  onLoadOptions={(q: string) => /*return the filtered list of options*/ }
+   <Autocomplete<any>
+      options={[{id:1, name:"Test 1"}, {id:2, name:"Test 2"}]}
+      keyProp={o => o.id}
+      textProp={o => o.name}
+    />
 />
 ```
 
-Example for Autocomplete with a list of complex objects
+Controlled Autocomplete with options loaded async
 
 ```javascript
 <Autocomplete
-  label="Länder"
-  value={value}
-  onOptionSelected={(object: any) => /*Do something with the id*/}
-  onLoadOptions={(q: string) => /*return the filtered list of options*/ }
-  textProp={option => option.name}
-/>
-```
-
-Example for Autocomplete with a list of complex objects and a custom `renderOption` function
-
-```javascript
-<Autocomplete
-  label="Länder"
-  value={value}
-  onOptionSelected={(object: any) => /*Do something with the id*/}
-  onLoadOptions={(q: string) => /*return the filtered list of options*/ }
-  textProp={option => option.name}
-  renderOption={(element, query) => (
-    <div>
-      <Typography>{HighlightQuery(element.name, query)}</Typography>
-      <Typography>
-        {HighlightQuery(element.region, query, {
-          color: "pink",
-          backgroundColor: "green"
-        })}
-      </Typography>
-    </div>
-  )}
+  variant="async"
+  onLoadOptions={query => api.queryCountries(query)}
+  keyToOption={key => api.getCountry(key)}
+  keyProp={o => o.name}
+  textProp={o => o.name}
 />
 ```
 

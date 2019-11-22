@@ -19,6 +19,6 @@ export interface IOptionArrayProps<T> extends IBaseProps<T> {
 export interface IAsyncOptionArrayProps<T> extends IBaseProps<T> {
   variant: "async";
   onLoadOptions: (query: string) => Promise<T[]>;
-  valueToOption: (value: any) => Promise<T>;
+  keyToOption: (value: any) => Promise<T>;
   debounceOnLoadOptions?: number;
 }

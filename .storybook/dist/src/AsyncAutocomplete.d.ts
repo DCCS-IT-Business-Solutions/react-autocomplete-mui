@@ -25,7 +25,7 @@ export declare namespace AsyncAutocomplete {
                     "name": string;
                 };
             };
-            "valueToOption": {
+            "keyToOption": {
                 "defaultValue": null;
                 "description": string;
                 "name": string;

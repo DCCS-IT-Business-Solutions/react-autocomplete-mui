@@ -133,7 +133,7 @@ const api = {
 //       value={value}
 //       valueProp={value => value.id}
 //       textProp={value => value.value}
-//       valueToOption={value => {
+//       keyToOption={value => {
 //         api.getValueForKey(value);
 //       }}
 //       // onOptionSelected={(object: any) => setValue(object)}
@@ -168,7 +168,7 @@ function AsyncAutocomplete() {
       textFieldProps={{ label: "Async" }}
       variant="async"
       onLoadOptions={query => api.queryCountries(query)}
-      valueToOption={key =>
+      keyToOption={key =>
         new Promise<any>((res, rej) => {
           setTimeout(() => {
             res(countries.find(c => c.name === key));
