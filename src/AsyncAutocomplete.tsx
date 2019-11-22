@@ -179,24 +179,7 @@ export function AsyncAutocomplete<T>(props: IAsyncOptionArrayProps<T>) {
       filterOptions={x => x}
       loading={loadingOptions || loadingValue}
       renderInput={params => (
-        <TextField
-          {...params}
-          autoComplete="off"
-          margin="normal"
-          style={{ minWidth: "240px" }}
-          InputProps={{
-            ...params.InputProps,
-            endAdornment: (
-              <React.Fragment>
-                {loadingOptions || loadingValue ? (
-                  <CircularProgress color="inherit" size={20} />
-                ) : null}
-                {params.InputProps.endAdornment}
-              </React.Fragment>
-            )
-          }}
-          {...textFieldProps}
-        />
+        <TextField {...params} autoComplete="off" {...textFieldProps} />
       )}
       {...others}
     />
