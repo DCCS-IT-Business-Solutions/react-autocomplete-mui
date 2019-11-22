@@ -2,7 +2,7 @@ import * as React from "react";
 import { IAsyncOptionArrayProps } from "./types";
 import { useDebounce } from "use-debounce";
 import Autocomplete, { RenderOptionState } from "@material-ui/lab/Autocomplete";
-import { TextField, CircularProgress } from "@material-ui/core";
+import { TextField } from "@material-ui/core";
 import { HighlightQuery } from "@dccs/utils";
 
 export function AsyncAutocomplete<T>(props: IAsyncOptionArrayProps<T>) {
