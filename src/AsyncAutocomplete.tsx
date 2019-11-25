@@ -19,6 +19,7 @@ export function AsyncAutocomplete<T>(props: IAsyncOptionArrayProps<T>) {
     onLoadOptions,
     debounceOnLoadOptions,
     keyToOption,
+    loading,
     ...others
   } = props;
 
@@ -188,7 +189,7 @@ export function AsyncAutocomplete<T>(props: IAsyncOptionArrayProps<T>) {
       options={options || []}
       value={selectedOption}
       filterOptions={x => x}
-      loading={loadingOptions || loadingValue}
+      loading={loadingOptions || loadingValue || loading}
       renderInput={params => (
         <TextField {...params} autoComplete="off" {...textFieldProps} />
       )}
