@@ -1,6 +1,6 @@
 import * as React from "react";
 import { storiesOf } from "@storybook/react";
-import { Paper } from "@material-ui/core";
+import { Paper, Typography } from "@material-ui/core";
 import { countries, keyValueList } from "./data";
 import { Autocomplete } from "../src/Autocomplete";
 
@@ -51,10 +51,11 @@ function DefaultAutocomplete() {
         onChange={(_, nValue) => setValue(nValue)}
         keyProp={o => o.name}
         textProp={o => o.name}
-        disableClearable={true}
+        // disableClearable={true}
         highlightQuery={true}
         textFieldProps={{ style: { minWidth: "240px" } }}
       />
+      <Typography variant="caption">current value: {value}</Typography>
       <br />
       <button onClick={() => setValue("")}>Set empty</button>
     </React.Fragment>
@@ -88,6 +89,7 @@ function AsyncAutocomplete() {
         // disableClearable={true}
         highlightQuery={true}
       />
+      <Typography variant="caption">current value: {value}</Typography>
       <br />
       <button onClick={() => setValue("")}>Set empty</button>
     </React.Fragment>

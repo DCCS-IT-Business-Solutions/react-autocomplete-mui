@@ -26,7 +26,7 @@ export function AsyncAutocomplete<T>(props: IAsyncOptionArrayProps<T>) {
   const [options, setOptions] = React.useState<T[] | undefined>();
   const [loadingOptions, setLoadingOptions] = React.useState<boolean>(false);
   const [loadingValue, setLoadingValue] = React.useState<boolean>(false);
-  const [selectedOption, setSelectedOption] = React.useState<T | null>(null);
+  const [selectedOption, setSelectedOption] = React.useState<T | "">("");
   const [inputValue, setInputValue] = React.useState<string>("");
   const [debouncedQuery] = useDebounce(
     inputValue,
@@ -41,13 +41,17 @@ export function AsyncAutocomplete<T>(props: IAsyncOptionArrayProps<T>) {
     }
   }
 
-  function handleInputChange(e: React.ChangeEvent<{}>, query: string) {
+  function handleInputChange(
+    e: React.ChangeEvent<{}>,
+    query: string,
+    reason: "input" | "reset"
+  ) {
     if (query !== inputValue) {
       setLoadingOptions(true);
       setInputValue(query || "");
     }
     if (onInputChange) {
-      onInputChange(e, query);
+      onInputChange(e, query, reason);
     }
   }
 
@@ -151,7 +155,7 @@ export function AsyncAutocomplete<T>(props: IAsyncOptionArrayProps<T>) {
           if (res) {
             setInputValue(getKeyFromOption(res));
           }
-          setSelectedOption(res || null);
+          setSelectedOption(res || "");
           setLoadingValue(false);
         },
         err => {
@@ -164,7 +168,7 @@ export function AsyncAutocomplete<T>(props: IAsyncOptionArrayProps<T>) {
         }
       );
     } else if (others.disableClearable !== true) {
-      setSelectedOption(null);
+      setSelectedOption("");
     }
   }
 

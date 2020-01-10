@@ -21,7 +21,7 @@ export function DefaultAutocomplete<T>(props: IOptionArrayProps<T>) {
     ...others
   } = props;
 
-  const [selectedOption, setSelectedOption] = React.useState<T | undefined>(
+  const [selectedOption, setSelectedOption] = React.useState<T | "">(
     keyToOption(value)
   );
   const [inputValue, setInputValue] = React.useState<string>("");
@@ -39,7 +39,7 @@ export function DefaultAutocomplete<T>(props: IOptionArrayProps<T>) {
         );
       }
     }
-    return undefined;
+    return "";
   }
 
   function handleChange(e: React.ChangeEvent<{}>, option: T) {
@@ -49,10 +49,14 @@ export function DefaultAutocomplete<T>(props: IOptionArrayProps<T>) {
     }
   }
 
-  function handleInputChange(e: React.ChangeEvent<{}>, query: string) {
+  function handleInputChange(
+    e: React.ChangeEvent<{}>,
+    query: string,
+    reason: "input" | "reset"
+  ) {
     setInputValue(query || "");
     if (onInputChange) {
-      onInputChange(e, query);
+      onInputChange(e, query, reason);
     }
   }
 
