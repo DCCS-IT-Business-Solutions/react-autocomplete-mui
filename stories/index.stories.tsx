@@ -39,42 +39,58 @@ const api = {
 function DefaultAutocomplete() {
   const [value, setValue] = React.useState("Austria");
 
+  React.useEffect(() => {
+    setTimeout(() => setValue("Canada"), 2000);
+  }, []);
+
   return (
-    <Autocomplete<any>
-      value={value}
-      options={countries}
-      onChange={(_, nValue) => setValue(nValue)}
-      keyProp={o => o.name}
-      textProp={o => o.name}
-      disableClearable={true}
-      highlightQuery={true}
-      textFieldProps={{ style: { minWidth: "240px" } }}
-    />
+    <React.Fragment>
+      <Autocomplete<any>
+        value={value}
+        options={countries}
+        onChange={(_, nValue) => setValue(nValue)}
+        keyProp={o => o.name}
+        textProp={o => o.name}
+        disableClearable={true}
+        highlightQuery={true}
+        textFieldProps={{ style: { minWidth: "240px" } }}
+      />
+      <br />
+      <button onClick={() => setValue("")}>Set empty</button>
+    </React.Fragment>
   );
 }
 
 function AsyncAutocomplete() {
   const [value, setValue] = React.useState("AT");
 
+  React.useEffect(() => {
+    setTimeout(() => setValue("CA"), 2000);
+  }, []);
+
   return (
-    <Autocomplete<any>
-      value={value}
-      textFieldProps={{ label: "Async", style: { minWidth: "240px" } }}
-      variant="async"
-      onLoadOptions={query => api.queryCountries(query)}
-      keyToOption={key =>
-        new Promise<any>((res, rej) => {
-          setTimeout(() => {
-            res(countries.find(c => c.alpha2Code === key));
-          }, 1000);
-        })
-      }
-      onChange={(_, nValue) => setValue(nValue)}
-      keyProp={o => o.alpha2Code}
-      textProp={o => o.name}
-      // disableClearable={true}
-      highlightQuery={true}
-    />
+    <React.Fragment>
+      <Autocomplete<any>
+        value={value}
+        textFieldProps={{ label: "Async", style: { minWidth: "240px" } }}
+        variant="async"
+        onLoadOptions={query => api.queryCountries(query)}
+        keyToOption={key =>
+          new Promise<any>((res, rej) => {
+            setTimeout(() => {
+              res(countries.find(c => c.alpha2Code === key));
+            }, 1000);
+          })
+        }
+        onChange={(_, nValue) => setValue(nValue)}
+        keyProp={o => o.alpha2Code}
+        textProp={o => o.name}
+        // disableClearable={true}
+        highlightQuery={true}
+      />
+      <br />
+      <button onClick={() => setValue("")}>Set empty</button>
+    </React.Fragment>
   );
 }
 

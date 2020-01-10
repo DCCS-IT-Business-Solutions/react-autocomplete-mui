@@ -33,6 +33,10 @@ export function DefaultAutocomplete<T>(props: IOptionArrayProps<T>) {
         if (option) {
           return option;
         }
+        // tslint:disable-next-line: no-console
+        console.error(
+          `@dccs/react-autocomplete-mui: no option found for ${key}!`
+        );
       }
     }
     return undefined;
@@ -115,6 +119,10 @@ export function DefaultAutocomplete<T>(props: IOptionArrayProps<T>) {
       return oArray;
     }
   }
+
+  React.useEffect(() => {
+    setSelectedOption(keyToOption(value));
+  }, [value]);
 
   return (
     <Autocomplete
