@@ -2383,7 +2383,34 @@ export declare namespace AsyncAutocomplete {
                     "name": string;
                 };
             };
+            "ChipProps": {
+                "defaultValue": null;
+                "description": string;
+                "name": string;
+                "required": boolean;
+                "type": {
+                    "name": string;
+                };
+            };
             "closeIcon": {
+                "defaultValue": null;
+                "description": string;
+                "name": string;
+                "required": boolean;
+                "type": {
+                    "name": string;
+                };
+            };
+            "clearText": {
+                "defaultValue": null;
+                "description": string;
+                "name": string;
+                "required": boolean;
+                "type": {
+                    "name": string;
+                };
+            };
+            "closeText": {
                 "defaultValue": null;
                 "description": string;
                 "name": string;
@@ -2410,7 +2437,25 @@ export declare namespace AsyncAutocomplete {
                     "name": string;
                 };
             };
+            "forcePopupIcon": {
+                "defaultValue": null;
+                "description": string;
+                "name": string;
+                "required": boolean;
+                "type": {
+                    "name": string;
+                };
+            };
             "ListboxComponent": {
+                "defaultValue": null;
+                "description": string;
+                "name": string;
+                "required": boolean;
+                "type": {
+                    "name": string;
+                };
+            };
+            "ListboxProps": {
                 "defaultValue": null;
                 "description": string;
                 "name": string;
@@ -2429,6 +2474,15 @@ export declare namespace AsyncAutocomplete {
                 };
             };
             "noOptionsText": {
+                "defaultValue": null;
+                "description": string;
+                "name": string;
+                "required": boolean;
+                "type": {
+                    "name": string;
+                };
+            };
+            "openText": {
                 "defaultValue": null;
                 "description": string;
                 "name": string;
@@ -2491,6 +2545,15 @@ export declare namespace AsyncAutocomplete {
                     "name": string;
                 };
             };
+            "size": {
+                "defaultValue": null;
+                "description": string;
+                "name": string;
+                "required": boolean;
+                "type": {
+                    "name": string;
+                };
+            };
             "autoComplete": {
                 "defaultValue": null;
                 "description": string;
@@ -2510,6 +2573,15 @@ export declare namespace AsyncAutocomplete {
                 };
             };
             "autoSelect": {
+                "defaultValue": null;
+                "description": string;
+                "name": string;
+                "required": boolean;
+                "type": {
+                    "name": string;
+                };
+            };
+            "blurOnSelect": {
                 "defaultValue": null;
                 "description": string;
                 "name": string;
@@ -2609,6 +2681,15 @@ export declare namespace AsyncAutocomplete {
                 };
             };
             "getOptionLabel": {
+                "defaultValue": null;
+                "description": string;
+                "name": string;
+                "required": boolean;
+                "type": {
+                    "name": string;
+                };
+            };
+            "getOptionSelected": {
                 "defaultValue": null;
                 "description": string;
                 "name": string;

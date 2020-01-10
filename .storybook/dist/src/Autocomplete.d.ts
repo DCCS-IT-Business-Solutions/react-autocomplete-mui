@@ -2357,7 +2357,34 @@ export declare namespace Autocomplete {
                     "name": string;
                 };
             };
+            "ChipProps": {
+                "defaultValue": null;
+                "description": string;
+                "name": string;
+                "required": boolean;
+                "type": {
+                    "name": string;
+                };
+            };
             "closeIcon": {
+                "defaultValue": null;
+                "description": string;
+                "name": string;
+                "required": boolean;
+                "type": {
+                    "name": string;
+                };
+            };
+            "clearText": {
+                "defaultValue": null;
+                "description": string;
+                "name": string;
+                "required": boolean;
+                "type": {
+                    "name": string;
+                };
+            };
+            "closeText": {
                 "defaultValue": null;
                 "description": string;
                 "name": string;
@@ -2384,7 +2411,25 @@ export declare namespace Autocomplete {
                     "name": string;
                 };
             };
+            "forcePopupIcon": {
+                "defaultValue": null;
+                "description": string;
+                "name": string;
+                "required": boolean;
+                "type": {
+                    "name": string;
+                };
+            };
             "ListboxComponent": {
+                "defaultValue": null;
+                "description": string;
+                "name": string;
+                "required": boolean;
+                "type": {
+                    "name": string;
+                };
+            };
+            "ListboxProps": {
                 "defaultValue": null;
                 "description": string;
                 "name": string;
@@ -2403,6 +2448,15 @@ export declare namespace Autocomplete {
                 };
             };
             "noOptionsText": {
+                "defaultValue": null;
+                "description": string;
+                "name": string;
+                "required": boolean;
+                "type": {
+                    "name": string;
+                };
+            };
+            "openText": {
                 "defaultValue": null;
                 "description": string;
                 "name": string;
@@ -2465,6 +2519,15 @@ export declare namespace Autocomplete {
                     "name": string;
                 };
             };
+            "size": {
+                "defaultValue": null;
+                "description": string;
+                "name": string;
+                "required": boolean;
+                "type": {
+                    "name": string;
+                };
+            };
             "autoComplete": {
                 "defaultValue": null;
                 "description": string;
@@ -2484,6 +2547,15 @@ export declare namespace Autocomplete {
                 };
             };
             "autoSelect": {
+                "defaultValue": null;
+                "description": string;
+                "name": string;
+                "required": boolean;
+                "type": {
+                    "name": string;
+                };
+            };
+            "blurOnSelect": {
                 "defaultValue": null;
                 "description": string;
                 "name": string;
@@ -2583,6 +2655,15 @@ export declare namespace Autocomplete {
                 };
             };
             "getOptionLabel": {
+                "defaultValue": null;
+                "description": string;
+                "name": string;
+                "required": boolean;
+                "type": {
+                    "name": string;
+                };
+            };
+            "getOptionSelected": {
                 "defaultValue": null;
                 "description": string;
                 "name": string;
