@@ -11,7 +11,7 @@ const api = {
         () =>
           res(
             countries.filter(
-              c => c.name.includes(query) || c.region.includes(query)
+              (c) => c.name.includes(query) || c.region.includes(query)
             )
           ),
 
@@ -23,7 +23,7 @@ const api = {
       setTimeout(
         () =>
           res(
-            keyValueList.filter(c =>
+            keyValueList.filter((c) =>
               c.value.toLocaleLowerCase().includes(query.toLowerCase())
             )
           ),
@@ -32,8 +32,8 @@ const api = {
     ),
   getValueForKey: (key: any) =>
     new Promise<any>((res, rej) =>
-      setTimeout(() => res(keyValueList.find(c => c.id === key)), 1000)
-    )
+      setTimeout(() => res(keyValueList.find((c) => c.id === key)), 1000)
+    ),
 };
 
 function DefaultAutocomplete() {
@@ -49,8 +49,8 @@ function DefaultAutocomplete() {
         value={value}
         options={countries}
         onChange={(_, nValue) => setValue(nValue)}
-        keyProp={o => o.name}
-        textProp={o => o.name}
+        keyProp={(o) => o.name}
+        textProp={(o) => o.name}
         // disableClearable={true}
         highlightQuery={true}
         textFieldProps={{ style: { minWidth: "240px" } }}
@@ -73,21 +73,25 @@ function AsyncAutocomplete() {
     <React.Fragment>
       <Autocomplete<any>
         value={value}
-        textFieldProps={{ label: "Async", style: { minWidth: "240px" } }}
+        textFieldProps={{
+          label: "Async",
+          style: { minWidth: "240px" },
+        }}
         variant="async"
-        onLoadOptions={query => api.queryCountries(query)}
-        keyToOption={key =>
+        onLoadOptions={(query) => api.queryCountries(query)}
+        keyToOption={(key) =>
           new Promise<any>((res, rej) => {
             setTimeout(() => {
-              res(countries.find(c => c.alpha2Code === key));
+              res(countries.find((c) => c.alpha2Code === key));
             }, 1000);
           })
         }
         onChange={(_, nValue) => setValue(nValue)}
-        keyProp={o => o.alpha2Code}
-        textProp={o => o.name}
+        keyProp={(o) => o.alpha2Code}
+        textProp={(o) => o.name}
         // disableClearable={true}
         highlightQuery={true}
+        loadingText={"asdf"}
       />
       <Typography variant="caption">current value: {value}</Typography>
       <br />

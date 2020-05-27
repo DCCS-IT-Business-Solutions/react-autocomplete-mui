@@ -2,7 +2,7 @@ import * as React from "react";
 import { IAsyncOptionArrayProps } from "./types";
 import { useDebounce } from "use-debounce";
 import Autocomplete, { RenderOptionState } from "@material-ui/lab/Autocomplete";
-import { TextField } from "@material-ui/core";
+import { TextField, CircularProgress } from "@material-ui/core";
 import { HighlightQuery } from "@dccs/utils";
 
 export function AsyncAutocomplete<T>(props: IAsyncOptionArrayProps<T>) {
@@ -117,11 +117,11 @@ export function AsyncAutocomplete<T>(props: IAsyncOptionArrayProps<T>) {
 
   function handleLoadOptions(query: string) {
     onLoadOptions(query).then(
-      res => {
+      (res) => {
         setOptions(res);
         setLoadingOptions(false);
       },
-      err => {
+      (err) => {
         // tslint:disable-next-line: no-console
         console.error(
           `@dccs/react-autocomplete-mui: Promise returned by onLoadOptions(${query}) was rejected!`,
@@ -134,7 +134,7 @@ export function AsyncAutocomplete<T>(props: IAsyncOptionArrayProps<T>) {
 
   async function handleKeyToOption(key: any) {
     if (options && options.length > 0) {
-      const option = options.find(o => getKeyFromOption(o) === key);
+      const option = options.find((o) => getKeyFromOption(o) === key);
       if (option) {
         return option;
       }
@@ -151,14 +151,14 @@ export function AsyncAutocomplete<T>(props: IAsyncOptionArrayProps<T>) {
       setOldValue(value);
 
       handleKeyToOption(value).then(
-        res => {
+        (res) => {
           if (res) {
             setInputValue(getKeyFromOption(res));
           }
           setSelectedOption(res || "");
           setLoadingValue(false);
         },
-        err => {
+        (err) => {
           // tslint:disable-next-line: no-console
           console.error(
             `@dccs/react-autocomplete-mui: Promise returned by keyToOption(${value}) was rejected!`,
@@ -192,10 +192,29 @@ export function AsyncAutocomplete<T>(props: IAsyncOptionArrayProps<T>) {
       onInputChange={handleInputChange}
       options={options || []}
       value={selectedOption}
-      filterOptions={x => x}
+      filterOptions={(x) => x}
       loading={loadingOptions || loadingValue || loading}
-      renderInput={params => (
-        <TextField {...params} autoComplete="off" {...textFieldProps} />
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          autoComplete="off"
+          {...textFieldProps}
+          InputProps={{
+            ...params.InputProps,
+            ...textFieldProps?.InputProps,
+            endAdornment: (
+              <React.Fragment>
+                {loading || loadingOptions || loadingValue ? (
+                  <CircularProgress color="inherit" size={20} />
+                ) : null}
+                {textFieldProps && textFieldProps.InputProps
+                  ? textFieldProps.InputProps.endAdornment
+                  : null}
+                {params.InputProps.endAdornment}
+              </React.Fragment>
+            ),
+          }}
+        />
       )}
       {...others}
     />
