@@ -39,10 +39,6 @@ const api = {
 function DefaultAutocomplete() {
   const [value, setValue] = React.useState("Austria");
 
-  React.useEffect(() => {
-    setTimeout(() => setValue("Canada"), 2000);
-  }, []);
-
   return (
     <React.Fragment>
       <Autocomplete<any>
@@ -64,10 +60,6 @@ function DefaultAutocomplete() {
 
 function AsyncAutocomplete() {
   const [value, setValue] = React.useState("AT");
-
-  React.useEffect(() => {
-    setTimeout(() => setValue("CA"), 2000);
-  }, []);
 
   return (
     <React.Fragment>
@@ -93,7 +85,9 @@ function AsyncAutocomplete() {
         highlightQuery={true}
         loadingText={"asdf"}
       />
-      <Typography variant="caption">current value: {value}</Typography>
+      <Typography variant="caption">
+        current value (country code): {value}
+      </Typography>
       <br />
       <button onClick={() => setValue("")}>Set empty</button>
     </React.Fragment>
@@ -103,6 +97,7 @@ function AsyncAutocomplete() {
 storiesOf("Autocomplete", module).add("Autocomplete", () => (
   <Paper style={{ minWidth: "600px", minHeight: "600px", padding: "10px" }}>
     <DefaultAutocomplete />
+    <div style={{ height: "16px" }} />
     <AsyncAutocomplete />
   </Paper>
 ));

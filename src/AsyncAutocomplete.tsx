@@ -153,7 +153,7 @@ export function AsyncAutocomplete<T>(props: IAsyncOptionArrayProps<T>) {
       handleKeyToOption(value).then(
         (res) => {
           if (res) {
-            setInputValue(getKeyFromOption(res));
+            setInputValue(getTextFromOption(res));
           }
           setSelectedOption(res || "");
           setLoadingValue(false);
