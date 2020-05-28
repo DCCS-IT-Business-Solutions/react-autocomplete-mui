@@ -16,7 +16,7 @@ You should install [react-autocomplete-mui with npm or yarn](https://www.npmjs.c
 
 This command will download and install react-autocomplete-mui
 
-<b>This package is only tested with `@material-ui/lab@^4.0.0-alpha.39`!!</b>
+<b>This package is only tested with `@material-ui/lab@4.0.0-alpha.39`!!</b>
 
 ## How it works
 
