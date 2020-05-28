@@ -16,6 +16,8 @@ You should install [react-autocomplete-mui with npm or yarn](https://www.npmjs.c
 
 This command will download and install react-autocomplete-mui
 
+<b>This package is only tested with `@material-ui/lab@^4.0.0-alpha.39`!!</b>
+
 ## How it works
 
 This package is based on the [@material-ui/lab/Autocomplete](https://material-ui.com/components/autocomplete/)
@@ -38,10 +40,10 @@ This package is based on the [@material-ui/lab/Autocomplete](https://material-ui
   variant="async"
   value={value}
   onChange={(e, v) => setValue(v)}
-  onLoadOptions={query => api.queryCountries(query)}
-  keyToOption={key => api.getCountry(key)}
-  keyProp={o => o.name}
-  textProp={o => o.name}
+  onLoadOptions={(query) => api.queryCountries(query)}
+  keyToOption={(key) => api.getCountry(key)}
+  keyProp={(o) => o.name}
+  textProp={(o) => o.name}
 />
 ```
 
