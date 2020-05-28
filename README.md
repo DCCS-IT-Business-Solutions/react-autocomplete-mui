@@ -29,6 +29,7 @@ This package is based on the [@material-ui/lab/Autocomplete](https://material-ui
       options={[{id:1, name:"Test 1"}, {id:2, name:"Test 2"}]}
       keyProp={o => o.id}
       textProp={o => o.name}
+      onChange={(e, v) => setValue(v)}
     />
 />
 ```
