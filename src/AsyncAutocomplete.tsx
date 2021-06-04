@@ -196,8 +196,8 @@ export function AsyncAutocomplete<T>(props: IAsyncOptionArrayProps<T>) {
       loading={loadingOptions || loadingValue || loading}
       renderInput={(params) => (
         <TextField
-          {...params}
           autoComplete="off"
+          {...params}
           {...textFieldProps}
           InputProps={{
             ...params.InputProps,

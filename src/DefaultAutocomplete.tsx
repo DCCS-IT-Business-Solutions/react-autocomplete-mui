@@ -138,7 +138,7 @@ export function DefaultAutocomplete<T>(props: IOptionArrayProps<T>) {
       value={selectedOption}
       filterOptions={handleFilterOptions}
       renderInput={params => (
-        <TextField {...params} autoComplete="off" {...textFieldProps} />
+        <TextField autoComplete="off" {...params} {...textFieldProps} />
       )}
       {...others}
     />
