@@ -1,6 +1,6 @@
 {
   "name": "@dccs/react-autocomplete-mui",
-  "version": "0.10.4",
+  "version": "0.10.5",
   "description": "React-Autocomplete without the tears",
   "main": "lib/index.js",
   "scripts": {
